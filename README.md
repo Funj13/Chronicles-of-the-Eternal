@@ -46,10 +46,8 @@ O jogo está em estágio **Alpha**, com as seguintes mecânicas já implementada
 
 | Inventário & Drop | Interação com Baús |
 | :---: | :---: |
-| *Coloque aqui o link da sua imagem do inventário* | *Coloque aqui o link da imagem do baú* |
 | ![Inventário](https://placehold.co/600x400/png?text=Print+do+Inventario) | ![Baú](https://placehold.co/600x400/png?text=Print+do+Bau) |
 
-> *Dica: Você pode arrastar suas imagens aqui no GitHub para gerar links reais!*
 
 ---
 
