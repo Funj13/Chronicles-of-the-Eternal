@@ -13,6 +13,11 @@
 
 **[ 📥 BAIXAR ÚLTIMA VERSÃO (Releases) ](https://github.com/Funj13/Chronicles-of-the-Eternal/releases)**
 <br />
+
+> 📢 **Ajude a criar o jogo!**
+> **[ 📝 CLIQUE AQUI PARA RESPONDER A PESQUISA DE OPINIÃO ](https://forms.gle/9UvjRowauLskvrHAA)**
+
+<br />
 _(Clique acima para ver o histórico de versões e links de download)_
 
 </div>
