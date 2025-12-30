@@ -1,5 +1,7 @@
 <div align="center">
 
+![Banner Chronicles of the Eternal](https://github.com/user-attachments/assets/534efad7-96fc-49cc-8d94-0c6d90fb8d1a)
+
 # ⚔️ Chronicles of the Eternal
 ### Um RPG de Ação 3D desenvolvido na Godot Engine 4
 
@@ -44,10 +46,9 @@ O jogo está em estágio **Alpha**, com as seguintes mecânicas já implementada
 
 ## 📸 Galeria (Devlog)
 
-| Inventário & Drop | Interação com Baús |
+| Menu Inicial | Loading |
 | :---: | :---: |
-| ![Inventário](https://placehold.co/600x400/png?text=Print+do+Inventario) | ![Baú](https://placehold.co/600x400/png?text=Print+do+Bau) |
-
+| ![Menu](https://github.com/user-attachments/assets/af7a7c7e-9996-4213-b808-ebde30e38820) | ![Loading](https://github.com/user-attachments/assets/401ec730-8713-4b04-9622-8e5c802bf2f8) |
 
 ---
 
