@@ -29,10 +29,33 @@ _(Clique acima para ver o histórico de versões e links de download)_
 
 Este repositório serve como um **Devlog (Diário de Desenvolvimento)** e documentação das atualizações.
 
+### ✨ Novas Funcionalidades (v5.0-Alpha)
+- **Novo Inimigo (Zumbi):** Implementação do primeiro mob hostil utilizando modelo estilo Anime (VRoid).
+<img width="903" height="483" alt="image" src="https://github.com/user-attachments/assets/edbb5b5c-db5e-4fa0-b5ad-0a08140628a5" />
+
+- **Sistema de IA Básica:** Inimigo persegue o jogador quando detectado e possui física de gravidade.
+- **Sistema de Dano Real:**
+  - Implementação de **Hitbox** (Espada) e **Hurtbox** (Inimigo).
+  - Feedback visual e físico (Knockback) ao acertar o inimigo.
+  
+![gif-attack ‐ Feito com o Clipchamp](https://github.com/user-attachments/assets/c133b843-60b4-4f01-854e-547593b7b854)
+
+- **Animações Reativas:**
+  - Máquina de estados para: `Idle` (Parado), `Run` (Perseguição), `Hit` (Dano) e `Death` (Morte).
+  - Integração de animações Mixamo com esqueleto VRoid via BoneMap.
+ 
+![gif-death ‐ Feito com o Clipchamp](https://github.com/user-attachments/assets/ebd939f9-3034-4f2d-8cce-a49b69639c7a)
+
+
+### 🛠️ Melhorias Técnicas
+- **Refatoração de Colisão:** Ajuste nas *Collision Layers* para evitar que o Player cause dano a si mesmo.
+- **Pipeline de Importação:** Correção de *Retargeting* de ossos para compatibilidade Godot 4 Humanoid.
+
+
 ## ✨ Funcionalidades Atuais
 O jogo está em estágio **Alpha**, com as seguintes mecânicas já implementadas:
 
-### 🎒 Sistema de Inventário & Loot (v4.5)
+### 🎒 Sistema de Inventário & Loot (v4.5-Alpha)
 - **Inventário em Grade:** Interface visual (UI) responsiva com slots.
 - **Física de Itens:** Drop real de itens no mundo 3D (clique direito para jogar no chão).
 - **Stacking:** Itens consumíveis (poções) se acumulam no mesmo slot.
