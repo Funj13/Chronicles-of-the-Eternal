@@ -1,0 +1,56 @@
+[gd_scene load_steps=4 format=3 uid="uid://byin8wmhdeo0w"]
+
+[ext_resource type="Script" uid="uid://b03xoaomsdmeh" path="res://scripts/inv_slot.gd" id="1_p5h00"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hhcjw"]
+bg_color = Color(0.021569123, 0.021569123, 0.021569123, 0.08235294)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+expand_margin_left = 2.0
+expand_margin_top = 2.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="Theme" id="Theme_p5h00"]
+default_font_size = 10
+
+[node name="Slot" type="Panel"]
+custom_minimum_size = Vector2(64, 64)
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hhcjw")
+script = ExtResource("1_p5h00")
+
+[node name="IconeItem" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+
+[node name="Amount" type="Label" parent="."]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 52.0
+offset_right = 66.0
+offset_bottom = 66.0
+theme = SubResource("Theme_p5h00")
+text = "00"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+flat = true
+metadata/_edit_use_anchors_ = true
+
+[connection signal="gui_input" from="Button" to="." method="_on_button_gui_input"]

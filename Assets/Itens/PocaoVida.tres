@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=3 format=3 uid="uid://bw6e5n1pd72jx"]
+
+[ext_resource type="Script" uid="uid://dbtwvfm54h0mr" path="res://scripts/item_data.gd" id="1_g0kid"]
+[ext_resource type="Texture2D" uid="uid://cnywtsodleb36" path="res://Images/pocao-de-cura-teste.png" id="1_ml34r"]
+
+[resource]
+script = ExtResource("1_g0kid")
+nome = "Poção de Cura"
+descricao = "Restaura 50 de vida. Tem gosto de morango."
+icone = ExtResource("1_ml34r")
+empilhavel = true
+valor_efeito = 25
+metadata/_custom_type_script = "uid://dbtwvfm54h0mr"

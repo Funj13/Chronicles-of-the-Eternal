@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://ljbthomqqss5"]
+
+[ext_resource type="Script" uid="uid://d38li5l3jn6qg" path="res://scripts/item_drop.gd" id="1_gap0k"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ybiva"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_1urk5"]
+
+[node name="ItemDrop" type="Area3D"]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0.21418908, 0)
+script = ExtResource("1_gap0k")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_ybiva")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_1urk5")

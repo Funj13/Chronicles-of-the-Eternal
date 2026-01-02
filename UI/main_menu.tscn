@@ -1,0 +1,242 @@
+[gd_scene load_steps=11 format=3 uid="uid://1pxtbdtx4eeq"]
+
+[ext_resource type="FontFile" uid="uid://dd5kjkcj2ep1s" path="res://Fonts/CinzelDecorative-Bold.ttf" id="1_d8nwk"]
+[ext_resource type="Script" uid="uid://8b1banjjft52" path="res://UI/main_menu.gd" id="1_p8ccj"]
+[ext_resource type="Texture2D" uid="uid://b2nyp5nocxyn6" path="res://Images/Wallpaper_My-Game-Ingles.png" id="3_4cwpn"]
+[ext_resource type="Texture2D" uid="uid://c4fwqujni60qk" path="res://Images/loading-theme-ingles.png" id="4_f40uw"]
+[ext_resource type="FontFile" uid="uid://dt4sqs0ukx3h8" path="res://Fonts/CinzelDecorative-Black.ttf" id="5_f40uw"]
+
+[sub_resource type="Theme" id="Theme_4cwpn"]
+default_font = ExtResource("1_d8nwk")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ctay"]
+bg_color = Color(0, 0, 0, 0.5882353)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.64705884, 0.49803922, 0.16470589, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 3.0
+expand_margin_top = 3.0
+expand_margin_right = 3.0
+expand_margin_bottom = 3.0
+shadow_color = Color(0, 0.88235295, 1, 1)
+shadow_size = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ev3b6"]
+bg_color = Color(0, 0.88235295, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 6
+
+[sub_resource type="Theme" id="Theme_8ctay"]
+default_font = ExtResource("5_f40uw")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k0a0m"]
+bg_color = Color(0, 0, 0, 0.67058825)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = SubResource("Theme_4cwpn")
+script = ExtResource("1_p8ccj")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("3_4cwpn")
+expand_mode = 1
+
+[node name="MenuInicial_Container" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 450.0
+offset_top = 212.0
+offset_right = 703.0
+offset_bottom = 449.0
+
+[node name="NewGame" type="Button" parent="MenuInicial_Container"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.8235294, 0.78431374, 1)
+theme_override_colors/font_focus_color = Color(0.6431373, 0.54901963, 0.50980395, 1)
+theme_override_colors/font_pressed_color = Color(0.33333334, 0.26666668, 0.20392157, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.92099476, 0.9209946, 0.9209946, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Novo Jogo
+"
+
+[node name="Loading" type="Button" parent="MenuInicial_Container"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.8235294, 0.78431374, 1)
+theme_override_colors/font_focus_color = Color(0.6431373, 0.54901963, 0.50980395, 1)
+theme_override_colors/font_pressed_color = Color(0.33333334, 0.26666668, 0.20392157, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Carregar"
+
+[node name="Config" type="Button" parent="MenuInicial_Container"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.8235294, 0.78431374, 1)
+theme_override_colors/font_focus_color = Color(0.6431373, 0.54901963, 0.50980395, 1)
+theme_override_colors/font_pressed_color = Color(0.33333334, 0.26666668, 0.20392157, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Opções"
+
+[node name="Exit" type="Button" parent="MenuInicial_Container"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.8235294, 0.78431374, 1)
+theme_override_colors/font_focus_color = Color(0.6431373, 0.54901963, 0.50980395, 1)
+theme_override_colors/font_pressed_color = Color(0.33333334, 0.26666668, 0.20392157, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Sair"
+
+[node name="LoadingScreen" type="Control" parent="."]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TextureRect" type="TextureRect" parent="LoadingScreen"]
+layout_mode = 0
+offset_right = 1151.0
+offset_bottom = 648.0
+texture = ExtResource("4_f40uw")
+expand_mode = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="LoadingScreen"]
+layout_mode = 0
+offset_left = 257.0
+offset_top = 577.0
+offset_right = 875.0
+offset_bottom = 603.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_styles/background = SubResource("StyleBoxFlat_8ctay")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ev3b6")
+value = 50.0
+
+[node name="CriarSave_Panel" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 1151.0
+offset_bottom = 648.0
+theme = SubResource("Theme_8ctay")
+theme_override_styles/panel = SubResource("StyleBoxFlat_k0a0m")
+
+[node name="title" type="Label" parent="CriarSave_Panel"]
+layout_mode = 0
+offset_left = 496.0
+offset_top = 215.0
+offset_right = 666.0
+offset_bottom = 241.0
+text = "Criar Novo Save"
+
+[node name="menu_organizator" type="VBoxContainer" parent="CriarSave_Panel"]
+layout_mode = 0
+offset_left = 440.0
+offset_top = 258.0
+offset_right = 761.0
+offset_bottom = 436.0
+
+[node name="name" type="Label" parent="CriarSave_Panel/menu_organizator"]
+layout_mode = 2
+text = "Nome do Herói:"
+
+[node name="InputNome" type="LineEdit" parent="CriarSave_Panel/menu_organizator"]
+layout_mode = 2
+
+[node name="LabelPersonagem" type="Label" parent="CriarSave_Panel/menu_organizator"]
+layout_mode = 2
+text = "Escolha seu Personagem:"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CriarSave_Panel/menu_organizator"]
+layout_mode = 2
+
+[node name="BtnBoy" type="Button" parent="CriarSave_Panel/menu_organizator/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.8235294, 0.78431374, 1)
+theme_override_colors/font_focus_color = Color(0.6431373, 0.54901963, 0.50980395, 1)
+theme_override_colors/font_pressed_color = Color(0.33333334, 0.26666668, 0.20392157, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Jogar com Ele"
+
+[node name="BtnGirl" type="Button" parent="CriarSave_Panel/menu_organizator/HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.8235294, 0.78431374, 1)
+theme_override_colors/font_focus_color = Color(0.6431373, 0.54901963, 0.50980395, 1)
+theme_override_colors/font_pressed_color = Color(0.33333334, 0.26666668, 0.20392157, 1)
+text = "Jogar com Ela"
+
+[node name="HBoxBotoesAcao" type="HBoxContainer" parent="CriarSave_Panel/menu_organizator"]
+layout_mode = 2
+
+[node name="BtnVoltar" type="Button" parent="CriarSave_Panel/menu_organizator/HBoxBotoesAcao"]
+layout_mode = 2
+text = "Voltar"
+
+[node name="BtnIniciar" type="Button" parent="CriarSave_Panel/menu_organizator/HBoxBotoesAcao"]
+layout_mode = 2
+text = "Iniciar Jornada"
+
+[node name="CarregarJogo_Panel" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_right = 1151.0
+offset_bottom = 648.0
+theme = SubResource("Theme_8ctay")
+theme_override_styles/panel = SubResource("StyleBoxFlat_k0a0m")
+
+[node name="title" type="Label" parent="CarregarJogo_Panel"]
+layout_mode = 0
+offset_left = 496.0
+offset_top = 215.0
+offset_right = 666.0
+offset_bottom = 241.0
+text = "Carregar Jogo"
+
+[node name="ListaSaves" type="VBoxContainer" parent="CarregarJogo_Panel"]
+layout_mode = 0
+offset_left = 440.0
+offset_top = 258.0
+offset_right = 761.0
+offset_bottom = 436.0
+alignment = 1
+
+[node name="BtnSlot1" type="Button" parent="CarregarJogo_Panel/ListaSaves"]
+layout_mode = 2
+text = "Slot 1 - Vazio"
+
+[node name="BtnSlot2" type="Button" parent="CarregarJogo_Panel/ListaSaves"]
+layout_mode = 2
+text = "Slot 2 - Vazio"
+
+[node name="BtnSlot3" type="Button" parent="CarregarJogo_Panel/ListaSaves"]
+layout_mode = 2
+text = "Slot 3 - Vazio"
+
+[node name="HBoxBotoesAcao" type="HBoxContainer" parent="CarregarJogo_Panel/ListaSaves"]
+layout_mode = 2
+alignment = 1
+
+[node name="BtnVoltar" type="Button" parent="CarregarJogo_Panel/ListaSaves/HBoxBotoesAcao"]
+layout_mode = 2
+text = "Voltar"
+
+[connection signal="pressed" from="MenuInicial_Container/NewGame" to="." method="_on_btn_novo_jogo_pressed"]
+[connection signal="pressed" from="MenuInicial_Container/Loading" to="." method="_on_loading_pressed"]
+[connection signal="pressed" from="MenuInicial_Container/Exit" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="CriarSave_Panel/menu_organizator/HBoxContainer/BtnBoy" to="." method="_on_btn_boy_pressed"]
+[connection signal="pressed" from="CriarSave_Panel/menu_organizator/HBoxContainer/BtnGirl" to="." method="_on_btn_girl_pressed"]
+[connection signal="pressed" from="CriarSave_Panel/menu_organizator/HBoxBotoesAcao/BtnVoltar" to="." method="_on_btn_voltar_pressed"]
+[connection signal="pressed" from="CriarSave_Panel/menu_organizator/HBoxBotoesAcao/BtnIniciar" to="." method="_on_btn_iniciar_jornada_pressed"]
+[connection signal="pressed" from="CarregarJogo_Panel/ListaSaves/BtnSlot1" to="." method="_on_btn_slot_1_pressed"]
+[connection signal="pressed" from="CarregarJogo_Panel/ListaSaves/BtnSlot2" to="." method="_on_btn_slot_2_pressed"]
+[connection signal="pressed" from="CarregarJogo_Panel/ListaSaves/BtnSlot3" to="." method="_on_btn_slot_3_pressed"]
+[connection signal="pressed" from="CarregarJogo_Panel/ListaSaves/HBoxBotoesAcao/BtnVoltar" to="." method="_on_btn_voltar_pressed"]

@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3 uid="uid://n6a311ewsl6e"]
+
+[ext_resource type="Texture2D" uid="uid://b1o2p8mjfg83t" path="res://terrain/world_slot0_albedo_bump.png" id="1_vonw3"]
+[ext_resource type="Material" path="res://addons/zylann.hterrain/tools/texture_editor/display_color_material.tres" id="2_oi3di"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2o6r5"]
+albedo_texture = ExtResource("1_vonw3")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_70uel"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hiqwa"]
+next_pass = ExtResource("2_oi3di")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2u3nc"]
+
+[node name="Level" type="CSGCombiner3D"]
+use_collision = true
+
+[node name="Chao" type="CSGBox3D" parent="."]
+size = Vector3(50, 1, 50)
+material = SubResource("StandardMaterial3D_2o6r5")
+
+[node name="PAREDES" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9977782, 2.504885)
+size = Vector3(5, 1, 5)
+material = SubResource("StandardMaterial3D_70uel")
+
+[node name="TETO" type="CSGPolygon3D" parent="PAREDES"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 2.0005116, 0.5038407, 2.606632)
+polygon = PackedVector2Array(-3.9965196, 0.03969574, -4.0170755, 5.8781824, -2.0666883, 3.4926736, 1, 0)
+depth = 11.0
+material = SubResource("StandardMaterial3D_hiqwa")
+
+[node name="TETO" type="CSGPolygon3D" parent="PAREDES/TETO"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -8.03, 0, -11)
+polygon = PackedVector2Array(-4.0442433, -0.01652956, -4.0170755, 5.8781824, -2.0666883, 3.4926736, 1, 0)
+depth = 11.0
+material = SubResource("StandardMaterial3D_2u3nc")
+
+[node name="PORTA" type="CSGBox3D" parent="PAREDES"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32867432, -0.25607896, 2.061115)
+operation = 2
+size = Vector3(0.34265137, 0.48339844, 1)
+
+[node name="FURO" type="CSGBox3D" parent="PAREDES"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.019138604, -0.1457901, 0.02509904)
+operation = 2
+size = Vector3(4.6876183, 0.71362305, 4.6968384)

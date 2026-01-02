@@ -1,0 +1,32 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Arquivos de importação (A Godot gera eles novamente se faltarem)
+# Mas atenção: na Godot 4, eles costumam ficar dentro de .godot/
+*.import
+
+# Arquivos de Exportação (Builds)
+build/
+export/
+*.exe
+*.pck
+*.zip
+*.rar
+
+# Configurações locais do Editor
+.godot/editor/
+selection_*.txt
+
+# Arquivos do Sistema Operacional
+Thumbs.db
+.DS_Store
+
+# Logs de Erro
+*.log
+
+# Ignorar modelos pesados de personagens
+assets/characters/*.tscn
+assets/characters/*.blend
+assets/characters/textures/
+assets/characters/inimigos/*.tscn
