@@ -14,8 +14,9 @@ var current_level: String = "res://world.tscn"
 var current_save_slot: int = 1 
 
 const CHAR_SCENES = {
-	"Boy": "res://Personagens/PlayerBoy.tscn",
-	"Girl": "res://Personagens/PlayerGirl.tscn"
+	"Boy": "res://Assets/Characters/PlayerBoy.tscn",
+	"Girl": "res://Assets/Characters/PlayerGirl.tscn"
+	
 }
 
 # --- FUNÇÃO AUXILIAR: Gera o nome do arquivo (ex: save_slot_1.json) ---

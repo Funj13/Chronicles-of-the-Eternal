@@ -1,14 +1,13 @@
 extends Control
 
-const CENA_DROP = preload("res://Scenes/ItemDrop.tscn") # CONFIRA O CAMINHO!
+const CENA_DROP = preload("res://Scenes/ItemDrop.tscn")
 
 @onready var is_open = false
 
-@onready var grid = $Botton/GridItens # Verifique se o caminho do seu Grid está certo!
-# Se o Grid for filho direto do Control, use só $GridItens. Ajuste conforme sua cena.
+@onready var grid = $Botton/GridItens
+
 
 func _ready():
-	# Começa fechado (Invisível)
 	visible = false
 
 func _input(event):
@@ -27,7 +26,7 @@ func abrir():
 	visible = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	
-	# A MÁGICA REAL: Atualiza o visual
+	#Atualizar o visual
 	atualizar_grid()
 
 func fechar():
@@ -44,13 +43,12 @@ func atualizar_grid():
 		var slot_ui = slots[i]
 		slot_ui.indice_slot = i
 		
-		# Conecta o sinal se necessário
 		if not slot_ui.slot_clicado.is_connected(usar_item):
 			slot_ui.slot_clicado.connect(usar_item)
 		
 		# --- ATUALIZAÇÃO DO VISUAL ---
 		if i < player.inventario.size():
-			var dados_slot = player.inventario[i] # Agora isso é um Dicionário ou Null
+			var dados_slot = player.inventario[i]
 			
 			if dados_slot != null:
 				# Passa o Item e a Quantidade correta
@@ -62,8 +60,7 @@ func atualizar_grid():
 				slot_ui.atualizar_slot(null, 0)
 				
 				
-# Esta função precisa estar conectada ao sinal 'slot_clicado' dos Slots
-func usar_item(indice, botao_mouse = -1): # Aceita o botão agora
+func usar_item(indice, botao_mouse = -1):
 	var player = get_tree().get_first_node_in_group("player")
 	if not player: return
 
@@ -72,7 +69,6 @@ func usar_item(indice, botao_mouse = -1): # Aceita o botão agora
 	if slot_data == null: return
 
 	# === BOTÃO ESQUERDO (1) = USAR ===
-	# (Se o botao_mouse for -1, é compatibilidade com código antigo)
 	if botao_mouse == MOUSE_BUTTON_LEFT or botao_mouse == -1:
 		player.usar_item_do_inventario(indice)
 		atualizar_grid()
@@ -92,7 +88,6 @@ func dropar_item(player, dados, indice):
 	
 	get_tree().current_scene.add_child(novo_drop)
 	
-	# === AQUI ESTÁ A CORREÇÃO ===
 	var item_sendo_dropado = dados["item"]
 	
 	# Se o item for do tipo "arma", manda o player desequipar visualmente
@@ -100,7 +95,7 @@ func dropar_item(player, dados, indice):
 		player.desequipar_arma()
 	# ============================
 	
-	# Remove da mochila
+	# Drop Item
 	player.inventario[indice] = null
 	atualizar_grid()
 	

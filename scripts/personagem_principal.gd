@@ -123,6 +123,8 @@ func _physics_process(delta):
 	
 	update_animation_parameters()
 	was_on_floor = is_on_floor()
+	
+
 
 func _input(event):
 	# Rolamento
@@ -202,6 +204,32 @@ func tentar_interagir():
 		if objeto.has_method("interagir"):
 			print("Encontrei um objeto interagível: ", objeto.name)
 			objeto.interagir(self) 
+
+
+#==============================================================================#
+# DESCER E SUBIR ESCADAS
+#==============================================================================#
+func _snap_down_to_stairs():
+	pass
+	
+var _was_on_floor_last_frame = false
+var _snapped_to_stairs_last_frame = false
+func _snap_down_to_stairs_check():
+	var did_snap = false
+	if not is_on_floor() and velocity.y <= 0 and (_was_on_floor_last_frame or _snapped_to_stairs_last_frame) and $StairsBelowRayCast3D.is_colliding():
+		var body_test_result = PhysicsTestMotionResult3D.new()
+		var params = PhysicsTestMotionParameters3D.new()
+		var max_step_down = -0.5
+		params.from = self.global_transform
+		params.motion = Vector3(0,max_step_down,0)
+		if PhysicsServer3D.body_test_motion(self.get_rid(), params, body_test_result):
+			var translate_y = body_test_result.get_travel().y
+			self.position.y += translate_y
+			apply_floor_snap()
+			did_snap = true
+
+	_was_on_floor_last_frame = is_on_floor()
+	_snapped_to_stairs_last_frame = did_snap
 
 #==============================================================================#
 # COMBATE E AÇÕES
@@ -291,13 +319,12 @@ func toggle_hitbox(ligar: bool):
 	print("Hitbox Ligada: ", ligar)
 
 
-# === CORREÇÃO IMPORTANTE AQUI ===
+# === DANO ===
 func receber_dano(quantidade: int):
 	vida.decrease(quantidade)
 	print("Vida atual: ", vida.current_amount)
 	
-	# Avisa a UI (Sinal)
-	# Tenta pegar o max_amount, se não existir usa 100
+	#SE O VALOR FOR NULL ELE MUDA PARA 100
 	var max_v = 100
 	if "max_amount" in vida:
 		max_v = vida.max_amount
