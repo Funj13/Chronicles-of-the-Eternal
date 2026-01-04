@@ -86,7 +86,7 @@ O jogo está em estágio **Alpha**, com as seguintes mecânicas já implementada
 - [x] Sistema de UI e Menu Principal
 - [x] Inventário Completo e Loot
 - [ ] **Tooltip (Informação de Itens)** 🚧 *Em Breve*
-- [ ] **Inimigos e IA Básica** 🚧 *Em Breve*
+- [x] **Inimigos e IA Básica** 🚧 *Em Breve*
 - [ ] Sistema de Quests
 - [ ] Save/Load System
 
