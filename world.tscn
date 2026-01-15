@@ -1,4 +1,4 @@
-[gd_scene load_steps=90 format=4 uid="uid://cthomxubocj2"]
+[gd_scene load_steps=94 format=4 uid="uid://cthomxubocj2"]
 
 [ext_resource type="Script" uid="uid://dtn7pi7r6jaia" path="res://scripts/world.gd" id="1_26xuy"]
 [ext_resource type="Texture2D" uid="uid://b1o2p8mjfg83t" path="res://terrain/world_slot0_albedo_bump.png" id="1_cbp6q"]
@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://bskmmyyfqrivu" path="res://Objects_Cenary/anime_medieval_house_3.jpg" id="11_6ah6f"]
 [ext_resource type="Script" uid="uid://cio2i66q3lxcy" path="res://scripts/GameResourceInterface.gd" id="11_ic0uy"]
 [ext_resource type="Texture2D" uid="uid://p30ewt24jrrm" path="res://Objects_Cenary/anime_medieval_house_4.jpg" id="12_g1i3r"]
+[ext_resource type="Script" uid="uid://dbtwvfm54h0mr" path="res://scripts/item_data.gd" id="18_wjb0r"]
 [ext_resource type="PackedScene" uid="uid://bgu4q1upruygh" path="res://UI/inventory_ui.tscn" id="19_bc84e"]
 [ext_resource type="Script" uid="uid://bbsap1ymgktev" path="res://scripts/bau.gd" id="20_bc84e"]
 [ext_resource type="Resource" uid="uid://bw6e5n1pd72jx" path="res://Assets/Itens/PocaoVida.tres" id="22_wukud"]
@@ -619,6 +620,150 @@ data = PackedVector3Array(4.334, -0.55759996, -0.0033, 4.3985, -0.55759996, -0.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_26xuy"]
 
+[sub_resource type="Animation" id="Animation_bc84e"]
+resource_name = "abrir"
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Tampa:rotation:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.87931424, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Tampa:rotation:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Tampa:rotation:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Tampa:position:x")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.0018128753, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Tampa:position:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.68221664, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Tampa:position:z")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.2918396, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_wukud"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Tampa:rotation:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.0005, 0, 0.0005, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Tampa:rotation:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.0005, 0, 0.0005, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Tampa:rotation:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.0005, 0, 0.0005, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Tampa:position:x")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.0005, 0, 0.0005, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Tampa:position:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.38321447, -0.0005, 0, 0.0005, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Tampa:position:z")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.0005, 0, 0.0005, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_il2jm"]
+_data = {
+&"RESET": SubResource("Animation_wukud"),
+&"abrir": SubResource("Animation_bc84e")
+}
+
 [sub_resource type="CanvasTexture" id="CanvasTexture_k3n1d"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k3n1d"]
@@ -913,26 +1058,23 @@ material = SubResource("StandardMaterial3D_qktwf")
 [node name="BauTeste" type="StaticBody3D" parent="NavigationRegion3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6928692, 11.832485)
 script = ExtResource("20_bc84e")
-item_recompensa = ExtResource("22_wukud")
-quantidade_recompensa = 5
+initial_items = Array[ExtResource("18_wjb0r")]([ExtResource("23_il2jm"), ExtResource("22_wukud"), ExtResource("22_wukud"), ExtResource("22_wukud"), ExtResource("22_wukud"), ExtResource("22_wukud")])
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/BauTeste"]
 shape = SubResource("BoxShape3D_bc84e")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/BauTeste"]
+[node name="Caixa" type="MeshInstance3D" parent="NavigationRegion3D/BauTeste"]
+transform = Transform3D(1, 0, 0, 0, 0.8, 0, 0, 0, 1, 0, -0.15020823, 0)
 mesh = SubResource("BoxMesh_26xuy")
 
-[node name="BauTeste" type="StaticBody3D" parent="NavigationRegion3D/BauTeste"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.033575296, 3.9411144)
-script = ExtResource("20_bc84e")
-item_recompensa = ExtResource("23_il2jm")
-quantidade_recompensa = 5
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/BauTeste/BauTeste"]
-shape = SubResource("BoxShape3D_bc84e")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/BauTeste/BauTeste"]
+[node name="Tampa" type="MeshInstance3D" parent="NavigationRegion3D/BauTeste"]
+transform = Transform3D(1, 0, 0, 0, 0.29999995, 0, 0, 0, 0.9999996, 0, 0.38321447, 0)
 mesh = SubResource("BoxMesh_26xuy")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="NavigationRegion3D/BauTeste"]
+libraries = {
+&"": SubResource("AnimationLibrary_il2jm")
+}
 
 [node name="Overlay" type="CanvasLayer" parent="."]
 

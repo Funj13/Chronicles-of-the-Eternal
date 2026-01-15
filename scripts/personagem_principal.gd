@@ -1,19 +1,19 @@
 extends CharacterBody3D
 
 #==============================================================================#
-# SINAIS (COMUNICAÇÃO COM A UI)
+# SIGNALS (UI COMMUNICATION)
 #==============================================================================#
-signal mudou_vida(nova_vida, max_vida)
-signal mudou_ouro(novo_ouro)
-signal mudou_xp(novo_xp, xp_maximo)
-signal mudou_nivel(novo_nivel)
+signal health_changed(new_health, max_health)
+signal gold_changed(new_gold)
+signal xp_changed(new_xp, max_xp)
+signal level_changed(new_level)
 
 #==============================================================================#
-# VARIÁVEIS
+# VARIABLES
 #==============================================================================#
 
-@export_category("Movimento")
-@export var velocidade_andar = 1.0
+@export_category("Movement")
+@export var velocidade_andar = 1.0 # Mantive export em PT para não perder valores no Editor
 @export var velocidade_corrida = 3.0
 @export var velocidade_agachado = 1.0
 @export var forca_pulo = 4.0
@@ -21,48 +21,51 @@ signal mudou_nivel(novo_nivel)
 
 @onready var face_manager = $Face 
 
-# --- DASH (NOVO SISTEMA) ---
+# --- DASH ---
 @export var dash_speed = 25.0
 @export var dash_duration = 0.2
 var is_dashing := false 
-@onready var dash_bubble = $corpo/DashBubble # A bolha de distorção (MeshInstance3D)
+@onready var dash_bubble = $corpo/DashBubble 
 @onready var camera_principal = $CameraRoot/CameraHorizontal/CameraVertical/SpringArm3D/Camera3D 
 
-# VIDA
+# HEALTH
 @onready var vida: GameResource = $Health
 
-# COMBATE & COMBO
+# COMBAT & COMBO
 var combo_count = 0
 var timer_combo_window = 0.0 
 var is_attacking = false
 var in_attack_cooldown := false 
-var arma_equipada_ref: ItemData = null 
 
-# ESTADO DA ARMA (INVENTÁRIO)
+# WEAPON STATE (INVENTORY)
 var is_weapon_equipped := false 
 var weapon_drawn := false 
+var equipped_weapon_ref: ItemData = null # Renomeado de 'arma_equipada_ref'
 
 @onready var hitbox_espada = $corpo/GeneralSkeleton/PontoAncoragemMao/weapon/Sketchfab_model/wado_fbx/RootNode/Box001/Object_4/ShapeKatana/HitboxArma
-# COMPONENTES VISUAIS (ARMAS)
+
+# VISUAL COMPONENTS (WEAPONS)
 @onready var visual_espada_mao = $corpo/GeneralSkeleton/PontoAncoragemMao/weapon 
 @onready var visual_espada_costas = $corpo/GeneralSkeleton/PontoAncoragemCostas/weapon
 
-# COMPONENTES DO PLAYER
+# PLAYER COMPONENTS
 @onready var animation_player = $corpo/AnimationPlayer
 @onready var animation_tree: AnimationTree = $corpo/AnimationTree
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 @onready var state_machine_combo = animation_tree.get("parameters/StateMachine_de_Combo/playback")
 
-# ESTADOS DE MOVIMENTO
+# MOVEMENT STATES
 var is_crouching := false
 var was_on_floor := false
 
-# INTERAÇÕES COM MAPA
+# INTERACTION
 @onready var raycast_interacao = $corpo/RayCast3D
-var inventario = []
+
+# --- INVENTORY SYSTEM ---
+var inventory = [] # Renomeado de 'inventario'
 
 #==============================================================================#
-# ESTATÍSTICAS DE RPG
+# RPG STATS
 #==============================================================================#
 var level: int = 1
 var xp_atual: int = 0
@@ -75,76 +78,76 @@ var atributos = {
 }
 
 #==============================================================================#
-# FUNÇÕES PRINCIPAIS
+# MAIN FUNCTIONS
 #==============================================================================#
 
 func _ready():
 	animation_tree.active = true
 	vida.depleated.connect(_on_vida_zerada)
 	
-	# INICIALIZAÇÃO DA UI
+	# UI INITIALIZATION
 	await get_tree().process_frame
 	
 	var vida_max = 100
 	if "max_amount" in vida:
 		vida_max = vida.max_amount
 		
-	mudou_vida.emit(vida.current_amount, vida_max)
+	health_changed.emit(vida.current_amount, vida_max)
 	atualizar_visual_armas()
-	inventario.resize(20)
+	
+	# Resize Inventory
+	inventory.resize(20)
 
-var proximo_ataque_agendado: bool = false # Buffer
+var proximo_ataque_agendado: bool = false 
 
 func _physics_process(delta):
-	# Gravidade
+	# Gravity
 	if not is_on_floor():
 		velocity.y -= 9.8 * delta
 	elif velocity.y < 0.0:
 		velocity.y = 0.0
 	
-	# Timer do Combo
+	# Combo Timer
 	if combo_count > 0 and not is_attacking:
 		timer_combo_window += delta
 		if timer_combo_window > 1.5:
 			combo_count = 0
 			timer_combo_window = 0
 
-	# --- LÓGICA DE ESTADOS ---
+	# --- STATE LOGIC ---
 	
-	# 1. ESTADO DE DASH (PRIORIDADE MÁXIMA)
+	# 1. DASH
 	if is_dashing:
 		move_and_slide()
-		return # Sai da função para não rodar mais nada
+		return 
 		
-	# 2. ESTADO DE ATAQUE
+	# 2. ATTACK
 	elif is_attacking:
 			if Input.is_action_just_pressed("attack"): proximo_ataque_agendado = true
 			
-			# Movimento lento durante ataque (Hybrid Feel)
+			# Slow movement during attack
 			velocity.x = move_toward(velocity.x, 0, 6.0 * delta)
 			velocity.z = move_toward(velocity.z, 0, 6.0 * delta)
 			
-			# Cancelamento com Dash
+			# Cancel with Dash
 			if Input.is_action_just_pressed("dash") and is_on_floor():
 				interromper_ataque_com_dash()
 				
 			move_and_slide()
 			checar_fim_da_animacao_ataque()
 
-	# 3. VIDA NORMAL
+	# 3. NORMAL
 	else:
 		handle_landing()
 		handle_actions()
 		
-		# --- COMBATE RESTAURADO (INPUT R e CLICK) ---
+		# Combat Input
 		handle_combat_input() 
-		# --------------------------------------------
 		
-		# Input de Dash Novo
+		# Dash Input
 		if Input.is_action_just_pressed("dash") and is_on_floor():
 			executar_dash()
 		
-		# Só calcula movimento se NÃO estiver em dash (Correção do bug de travar)
 		if not is_dashing: 
 			handle_movement()
 			
@@ -157,24 +160,29 @@ func _input(event):
 	# Debug
 	if Input.is_action_just_pressed("Suicidy"): receber_dano(10)
 
-	# Tecla T (Debug Inventário)
+	# Debug Inventory (Key T)
 	if event is InputEventKey and event.pressed and event.keycode == KEY_T:
 		is_weapon_equipped = not is_weapon_equipped
 		weapon_drawn = false 
 		atualizar_visual_armas()
 		print("Simulação: Arma equipada? ", is_weapon_equipped)
 		
-	# Interação E
+	# Interaction (E)
 	if event.is_action_pressed("interact"): tentar_interagir()
 
-	# UI (Pause e Inventário)
+	# UI (Pause and Inventory)
+	if event.is_action_pressed("toggle_inventory"): # TAB
+		toggle_inventory()
+
 	if event.is_action_pressed("pause") or (event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE):
-		var inventario_ui = get_tree().get_first_node_in_group("ui_inventario")
+		# Close Inventory if open
+		var inventario_ui = get_tree().get_first_node_in_group("ui_inventory") # Grupo atualizado
 		if inventario_ui and inventario_ui.visible:
-			inventario_ui.fechar()
+			inventario_ui.close()
 			get_viewport().set_input_as_handled()
 			return 
 			
+		# Toggle Pause
 		var menu_pause = get_tree().get_first_node_in_group("ui_pause")
 		if menu_pause:
 			menu_pause.toggle_pause_menu()
@@ -182,30 +190,38 @@ func _input(event):
 		elif has_node("/root/World/Overlay/MenuPause"):
 			get_node("/root/World/Overlay/MenuPause").toggle_pause_menu()
 
+func toggle_inventory():
+	var ui = get_tree().get_first_node_in_group("ui_inventory") # Grupo em inglês
+	if ui:
+		if ui.visible:
+			ui.close()
+		else:
+			ui.open_default(self)
+
 func tentar_interagir():
 	if raycast_interacao.is_colliding():
 		var objeto = raycast_interacao.get_collider()
-		if objeto.has_method("interagir"):
-			objeto.interagir(self) 
+		if objeto.has_method("interact"): # Atualizado para inglês
+			objeto.interact(self)
+		elif objeto.has_method("interagir"): # Compatibilidade com antigo
+			objeto.interagir(self)
 
 #==============================================================================#
-# COMBATE E AÇÕES
+# COMBAT AND ACTIONS
 #==============================================================================#
 
-# --- LÓGICA RESTAURADA DE INPUT DE COMBATE ---
 func handle_combat_input():
 	if not is_weapon_equipped:
 		return
 
-	# Sacar/Guardar arma com R (equip_toggle)
+	# Toggle weapon draw (R)
 	if Input.is_action_just_pressed("equip_toggle"):
 		weapon_drawn = not weapon_drawn
 		atualizar_visual_armas()
 	
-	# Atacar apenas se a arma estiver SACADA (na mão)
+	# Attack
 	if Input.is_action_just_pressed("attack") and weapon_drawn:
 		realizar_ataque_combo()
-# ---------------------------------------------
 
 func atualizar_visual_armas():
 	if not visual_espada_mao or not visual_espada_costas:
@@ -222,12 +238,13 @@ func atualizar_visual_armas():
 			visual_espada_mao.visible = false
 			visual_espada_costas.visible = true
 
-func desequipar_arma():
+# Renomeado para inglês (InventoryUI chama isso)
+func unequip_weapon():
 	if is_weapon_equipped:
-		print("Desequipando arma...")
+		print("Unequipping weapon...")
 		is_weapon_equipped = false
 		weapon_drawn = false
-		arma_equipada_ref = null
+		equipped_weapon_ref = null
 		atualizar_visual_armas()
 		
 func realizar_ataque_combo():
@@ -241,7 +258,7 @@ func realizar_ataque_combo():
 	timer_combo_window = 0 
 	is_attacking = true 
 	
-	# Auto-Aim e Impulso
+	# Auto-Aim
 	var input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	if input_dir != Vector2.ZERO:
 		var camera_rotation_y = $CameraRoot/CameraHorizontal.global_rotation.y
@@ -251,7 +268,7 @@ func realizar_ataque_combo():
 	else:
 		velocity = -$corpo.global_transform.basis.z * (-2.0)
 
-	# Animação
+	# Anim
 	var anim_nome = "Atk1"
 	if combo_count == 2: anim_nome = "Atk2"
 	elif combo_count >= 3: 
@@ -269,7 +286,6 @@ func checar_fim_da_animacao_ataque():
 			realizar_ataque_combo()
 		else:
 			is_attacking = false
-			print("Fim do combo.")
 
 func hitbox_rotina_segura():
 	await get_tree().create_timer(0.2).timeout
@@ -283,13 +299,13 @@ func interromper_ataque_com_dash():
 	is_attacking = false
 	proximo_ataque_agendado = false
 	toggle_hitbox(false)
-	executar_dash() # Chama o dash novo
+	executar_dash()
 
 func toggle_hitbox(ligar: bool):
 	if not hitbox_espada: return
 	hitbox_espada.monitoring = ligar
 
-# === DANO ===
+# === DAMAGE ===
 func receber_dano(quantidade: int):
 	face_manager.mudar_expressao("ou")
 	vida.decrease(quantidade)
@@ -297,18 +313,18 @@ func receber_dano(quantidade: int):
 	var max_v = 100
 	if "max_amount" in vida:
 		max_v = vida.max_amount
-	mudou_vida.emit(vida.current_amount, max_v)
+	health_changed.emit(vida.current_amount, max_v)
 
 func _on_vida_zerada():
 	print("Você morreu!")
 	get_tree().reload_current_scene()
 
 #==============================================================================#
-# PROGRESSÃO E INVENTÁRIO
+# PROGRESSION AND INVENTORY
 #==============================================================================#
-func ganhar_xp(quantidade: int):
+func ganhar_xp(quantidade: int): # Pode mudar para gain_xp se quiser, mas atualize as chamadas
 	xp_atual += quantidade
-	mudou_xp.emit(xp_atual, xp_proximo_nivel) 
+	xp_changed.emit(xp_atual, xp_proximo_nivel) 
 	if xp_atual >= xp_proximo_nivel: subir_nivel()
 		
 func subir_nivel():
@@ -322,60 +338,69 @@ func subir_nivel():
 	if "max_amount" in vida:
 		vida.max_amount += 20 
 		vida.current_amount = vida.max_amount
-		mudou_vida.emit(vida.current_amount, vida.max_amount)
+		health_changed.emit(vida.current_amount, vida.max_amount)
 	
-	mudou_nivel.emit(level)
-	mudou_xp.emit(xp_atual, xp_proximo_nivel) 
+	level_changed.emit(level)
+	xp_changed.emit(xp_atual, xp_proximo_nivel) 
 
-func receber_ouro(quantidade: int):
-	ouro += quantidade
-	mudou_ouro.emit(ouro)
+# Renomeado para inglês
+func receive_gold(amount: int):
+	ouro += amount
+	gold_changed.emit(ouro)
 
-func adicionar_item(item_novo: ItemData, qtd: int = 1) -> bool:
+# Renomeado para inglês
+func add_item(item_novo: ItemData, qtd: int = 1) -> bool:
+	# 1. Empilhar
 	if item_novo.empilhavel:
-		for i in range(inventario.size()):
-			if inventario[i] != null and inventario[i]["item"] == item_novo:
-				inventario[i]["quantidade"] += qtd
-				mudou_inventario()
+		for i in range(inventory.size()):
+			if inventory[i] != null and inventory[i]["item"] == item_novo:
+				inventory[i]["quantity"] += qtd # Atenção: "quantity" (inglês)
+				on_inventory_changed()
 				return true
 
-	for i in range(inventario.size()):
-		if inventario[i] == null:
-			inventario[i] = { "item": item_novo, "quantidade": qtd }
-			mudou_inventario()
+	# 2. Slot Vazio
+	for i in range(inventory.size()):
+		if inventory[i] == null:
+			inventory[i] = { "item": item_novo, "quantity": qtd }
+			on_inventory_changed()
 			return true
 	return false
 
-func mudou_inventario():
-	var ui = get_tree().get_first_node_in_group("ui_inventario")
-	if ui and ui.visible: ui.atualizar_grid()
+# Renomeado para inglês
+func on_inventory_changed():
+	var ui = get_tree().get_first_node_in_group("ui_inventory")
+	if ui and ui.visible: 
+		# Chama a função nova da UI com o filtro atual
+		ui.update_player_grid(ui.current_filter)
 
-func usar_item_do_inventario(indice):
-	var slot_data = inventario[indice]
+# Renomeado para inglês
+func use_item(index):
+	var slot_data = inventory[index]
 	if slot_data == null: return
 	var item = slot_data["item"]
 	
 	if item.tipo == "consumivel":
 		if vida.current_amount < vida.max_amount:
 			vida.increase(item.valor_efeito)
-			mudou_vida.emit(vida.current_amount, vida.max_amount)
-			slot_data["quantidade"] -= 1
-			if slot_data["quantidade"] <= 0: inventario[indice] = null
-			mudou_inventario()
+			health_changed.emit(vida.current_amount, vida.max_amount)
+			slot_data["quantity"] -= 1
+			if slot_data["quantity"] <= 0: inventory[index] = null
+			on_inventory_changed()
 
 	elif item.tipo == "arma":
-		if is_weapon_equipped and arma_equipada_ref == item:
-			desequipar_arma()
+		if is_weapon_equipped and equipped_weapon_ref == item:
+			unequip_weapon()
 		else:
 			is_weapon_equipped = true
-			weapon_drawn = false # <--- VOLTOU AQUI: Começa guardada!
-			arma_equipada_ref = item 
+			weapon_drawn = false 
+			equipped_weapon_ref = item 
 			atualizar_visual_armas()
-		var inv_ui = get_tree().get_first_node_in_group("ui_inventario")
-		if inv_ui: inv_ui.fechar()
+		
+		# IMPORTANTE: Removi a linha que fechava o inventário
+		on_inventory_changed()
 
 #==============================================================================#
-# MOVIMENTO E ANIMAÇÃO
+# MOVEMENT AND ANIMATION
 #==============================================================================#
 
 func handle_actions():
@@ -416,10 +441,6 @@ func handle_movement():
 
 func update_animation_parameters():
 	var vel_horizontal = Vector2(velocity.x, velocity.z).length()
-	var blend_pos = 0.0
-	
-	if vel_horizontal > 0.1:
-		blend_pos = vel_horizontal / velocidade_corrida 
 	
 	var anim_blend = Vector2(0, -1.0 if vel_horizontal > 0.1 else 0)
 	if Input.is_action_pressed("sprint"): anim_blend.y = -2.0
@@ -442,7 +463,7 @@ func handle_landing():
 		animation_tree.set("parameters/Landing_OneShot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 
 #==============================================================================#
-# NOVO SISTEMA DE DASH (Substitui Rolada)
+# DASH SYSTEM
 #==============================================================================#
 
 func executar_dash():
@@ -450,101 +471,38 @@ func executar_dash():
 	
 	is_dashing = true
 	
-	# 1. DIREÇÃO: Baseada na Câmera
+	# 1. DIRECTION
 	var input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction = Vector3.ZERO
 	
 	if input_dir != Vector2.ZERO:
 		var camera_rotation_y = $CameraRoot/CameraHorizontal.global_rotation.y
 		direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, camera_rotation_y).normalized()
-		# Gira o corpo visualmente para a direção do dash
 		$corpo.rotation.y = atan2(direction.x, direction.z)
 	else:
-		# Se não apertar nada, dash para frente (para onde o corpo está olhando)
 		direction = $corpo.global_transform.basis.z 
 
-	# 2. FÍSICA EXPLOSIVA
+	# 2. PHYSICS
 	velocity = direction * dash_speed
 	
-	# 3. ANIMAÇÃO (Dispara o nó que você configurou na AnimationTree)
-	# Isso vai tocar a animação de "Strafe" por cima de tudo
+	# 3. ANIMATION
 	animation_tree.set("parameters/OneShot_Dash/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 	
-	# 4. EFEITOS VISUAIS (Bolha + Inclinação em Pé)
-	#if dash_bubble:
-	#	dash_bubble.visible = 
-	#	dash_bubble.scale = Vector3(1, 1, 1) # Reinicia tamanho
-	#	
+	# 4. VISUALS
 	var tween = create_tween().set_parallel(true)
-	#	
-	#	# A bolha cresce rápido
-	#	tween.tween_property(dash_bubble, "scale", Vector3(2.5, 2.5, 2.5), 0.2)
-		
-		# --- EFEITO NIER EM PÉ ---
-		# Apenas inclina o tronco 15 graus para frente (Aerodinâmica)
-		# Não mexemos na position.y, então ele desliza em pé!
-	#	tween.tween_property($corpo, "rotation:x", deg_to_rad(-15), 0.1) 
-		
-	if camera_principal:
-		tween.tween_property(camera_principal, "fov", 90.0, 0.1) # Zoom Out (Warp)
 	
-	# 5. TEMPO (Duração do Dash)
+	if camera_principal:
+		tween.tween_property(camera_principal, "fov", 90.0, 0.1) # Zoom Out
+	
+	# 5. TIMER
 	await get_tree().create_timer(dash_duration).timeout
 	
-	# 6. RESET E LIMPEZA
-	#if dash_bubble:
-	#	dash_bubble.visible = false
-		
-	# Volta a inclinação e a câmera ao normal suavemente
+	# 6. RESET
 	var tween_volta = create_tween().set_parallel(true)
 	tween_volta.tween_property($corpo, "rotation:x", 0.0, 0.2) 
 	
 	if camera_principal:
-		tween_volta.tween_property(camera_principal, "fov", 75.0, 0.2)
-
-	velocity = Vector3.ZERO # Para o movimento
-	is_dashing = false
-	if is_dashing: return
-	
-	is_dashing = true
-	
-	# 1. DIREÇÃO: Baseada na Câmera
-	input_dir = Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	direction = Vector3.ZERO
-	
-	if input_dir != Vector2.ZERO:
-		var camera_rotation_y = $CameraRoot/CameraHorizontal.global_rotation.y
-		direction = Vector3(input_dir.x, 0, input_dir.y).rotated(Vector3.UP, camera_rotation_y).normalized()
-		# Gira o corpo visualmente
-		$corpo.rotation.y = atan2(direction.x, direction.z)
-	else:
-		# Se não apertar nada, dash para onde o corpo está olhando
-		direction = $corpo.global_transform.basis.z 
-
-	# 2. FÍSICA EXPLOSIVA
-	velocity = direction * dash_speed
-	
-	# 3. EFEITOS VISUAIS (BOLHA + FOV)
-	#if dash_bubble:
-	#	dash_bubble.visible = true
-	#	dash_bubble.scale = Vector3(1, 1, 1) # Reinicia tamanho
-		
-	#var tween = create_tween().set_parallel(true)
-		#tween.tween_property(dash_bubble, "scale", Vector3(1.0, 1.0, 1.0), 0.2) # Bolha cresce
-		
-	if camera_principal:
-		tween.tween_property(camera_principal, "fov", 90.0, 0.1) # Zoom Out
-	
-	# 4. TEMPO
-	await get_tree().create_timer(dash_duration).timeout
-	
-	# 5. RESET
-	if dash_bubble:
-		dash_bubble.visible = false
-		
-	if camera_principal:
-		tween_volta = create_tween()
-		tween_volta.tween_property(camera_principal, "fov", 75.0, 0.2) # Zoom Volta
+		tween_volta.tween_property(camera_principal, "fov", 75.0, 0.2) # Zoom Reset
 
 	velocity = Vector3.ZERO
 	is_dashing = false

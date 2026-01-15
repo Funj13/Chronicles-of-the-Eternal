@@ -1,183 +1,314 @@
 extends Control
 
-const CENA_DROP = preload("res://Scenes/ItemDrop.tscn") # Verifique o caminho!
+const DROP_SCENE = preload("res://Scenes/ItemDrop.tscn")
+const SLOT_SCENE = preload("res://Scenes/slot.tscn")
 
-@onready var is_open = false
-@onready var grid = $Botton/GridItens
+# ==============================================================================
+# UI REFERENCES (Atualizado para imagem image_871acd.png)
+# ==============================================================================
 
-# Referências aos componentes do PAINEL DE DETALHES (Lado Direito)
-@onready var painel_detalhes = $Panel
-@onready var label_nome_detalhe = $Panel/Panel_Item/Name_item
-# Esta é a referência para o TextureRect do ícone grande
-@onready var label_icone_detalhe = $Panel/Slot99/IconeItem 
-@onready var label_desc_detalhe = $Panel/description
-@onready var btn_acao = $Panel/VBoxContainer/equip
-@onready var btn_drop = $Panel/VBoxContainer/drop
+# --- SIDEBAR BUTTONS ---
+@onready var btn_resources = $menu/side_menu/resources
+@onready var btn_equip = $menu/side_menu/equipment
+@onready var btn_files = $menu/side_menu/archives
+@onready var btn_chest = $menu/side_menu/loot
 
-var indice_selecionado: int = -1
+# --- PLAYER GRID (ESQUERDA) ---
+# Agora usa o novo nome "Bottom_Inventario"
+@onready var grid_player = $Bottom_Inventario/GridItens 
+
+# --- DETALHES (DIREITA - MODO 1) ---
+# Referência ao PAI de todos os detalhes
+@onready var mode_details_root = $Menu_Detalhes 
+
+# Filhos dentro de Menu_Detalhes
+@onready var icon_detail = $Menu_Detalhes/Slot99/IconeItem
+@onready var name_detail = $Menu_Detalhes/Panel_Item/Name_item
+@onready var desc_detail = $Menu_Detalhes/description
+@onready var btn_action = $Menu_Detalhes/VBoxContainer/equip
+@onready var btn_drop = $Menu_Detalhes/VBoxContainer/drop
+@onready var container_buttons = $Menu_Detalhes/VBoxContainer
+
+# --- BAÚ (DIREITA - MODO 2) ---
+# Referência ao PAI do baú (Agora separado!)
+@onready var mode_chest_root = $Bau 
+
+# Filhos dentro de Bau
+@onready var mode_chest_grid = $Bau/GridContainer
+@onready var mode_chest_label = $Bau/Panel_Item/Name_item
+
+# ==============================================================================
+# STATE VARIABLES
+# ==============================================================================
+var player_ref = null
+var current_chest_ref = null
+var selected_index: int = -1
+var current_filter: String = "all"
 
 func _ready():
 	visible = false
-	painel_detalhes.visible = false # Começa escondido
 	
-	# Conecta os botões do painel às funções
-	btn_acao.pressed.connect(_on_btn_acao_pressed)
+	# Conexões dos botões do menu
+	btn_resources.pressed.connect(func(): switch_tab("resource"))
+	btn_equip.pressed.connect(func(): switch_tab("equipment"))
+	btn_files.pressed.connect(func(): switch_tab("file"))
+	btn_chest.pressed.connect(func(): switch_tab("chest"))
+	
+	# Conexões das ações
+	btn_action.pressed.connect(_on_btn_action_pressed)
 	btn_drop.pressed.connect(_on_btn_drop_pressed)
-
-func _input(event):
-	if get_tree().paused and not visible: return # Só abre se não estiver pausado por outro motivo
 	
-	if event.is_action_pressed("toggle_inventory"):
-		if is_open:
-			fechar()
-		else:
-			abrir()
+	# Estado inicial: Esconde botão de loot e painel do baú
+	if btn_chest: btn_chest.visible = false
+	if mode_chest_root: mode_chest_root.visible = false
+	if mode_details_root: mode_details_root.visible = true # Começa mostrando detalhes
 
-func abrir():
+# ==============================================================================
+# OPEN / CLOSE LOGIC
+# ==============================================================================
+
+func open_default(player):
+	player_ref = player
+	current_chest_ref = null
+	
+	if btn_chest: btn_chest.visible = false
 	visible = true
-	is_open = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	atualizar_grid()
+	
+	switch_tab("all")
 
-func fechar():
+func open_with_chest(player, chest):
+	player_ref = player
+	current_chest_ref = chest
+	
+	if btn_chest: btn_chest.visible = true
+	visible = true
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	switch_tab("chest")
+
+func close():
 	visible = false
-	is_open = false
-	painel_detalhes.visible = false # Limpa a seleção ao fechar
-	indice_selecionado = -1
+	selected_index = -1
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	
+	if current_chest_ref and current_chest_ref.has_method("close_chest"):
+		current_chest_ref.close_chest()
 
-func atualizar_grid():
-	var player = get_tree().get_first_node_in_group("player")
-	if not player: return
+# ==============================================================================
+# TABS & FILTERS (Lógica Simplificada!)
+# ==============================================================================
+
+func switch_tab(mode: String):
+	current_filter = mode
+	selected_index = -1
+	
+	if mode == "chest":
+		# --- ATIVAR MODO BAÚ ---
+		# Como você separou os nós, agora é fácil: desliga um, liga o outro.
+		if mode_details_root: mode_details_root.visible = false
+		if mode_chest_root: mode_chest_root.visible = true
 		
-	var slots = grid.get_children()
+		# Configura o Baú
+		update_chest_grid()
+		if current_chest_ref and mode_chest_label:
+			mode_chest_label.text = "Conteúdo"
+		
+		update_player_grid("all")
+		
+	else:
+		# --- ATIVAR MODO DETALHES ---
+		if mode_chest_root: mode_chest_root.visible = false
+		if mode_details_root: mode_details_root.visible = true
+		
+		update_player_grid(mode)
+		update_details_panel()
+
+# ==============================================================================
+# GRID UPDATES
+# ==============================================================================
+
+func update_player_grid(filter: String):
+	if not player_ref: return
+	
+	var slots = grid_player.get_children()
+	var inventory = player_ref.inventory 
 	
 	for i in range(slots.size()):
 		var slot_ui = slots[i]
-		slot_ui.indice_slot = i
+		slot_ui.slot_index = i
 		
-		# Conecta o sinal do slot à função de SELECIONAR (não usar direto)
-		if not slot_ui.slot_clicado.is_connected(_on_slot_clicked):
-			slot_ui.slot_clicado.connect(_on_slot_clicked)
+		if not slot_ui.slot_clicked.is_connected(_on_slot_clicked):
+			slot_ui.slot_clicked.connect(_on_slot_clicked.bind("PLAYER"))
 		
-		if i < player.inventario.size():
-			var dados_slot = player.inventario[i]
-			if dados_slot != null:
-				slot_ui.item_armazenado = dados_slot["item"]
-				slot_ui.atualizar_slot(dados_slot["item"], dados_slot["quantidade"])
+		if i < inventory.size() and inventory[i] != null:
+			var item = inventory[i]["item"]
+			
+			# Filtros
+			var show = true
+			if filter != "all":
+				if filter == "equipment" and item.tipo != "arma": show = false
+				elif filter == "resource" and item.tipo != "recurso": show = false
+				elif filter == "file" and item.tipo != "arquivo": show = false
+			
+			if show:
+				slot_ui.visible = true
+				slot_ui.update_slot(item, inventory[i]["quantity"])
 			else:
-				slot_ui.item_armazenado = null
-				slot_ui.atualizar_slot(null, 0)
-
-	# Se tiver algo selecionado, atualiza o painel também (ex: gastou poção, atualiza qtd ou fecha se acabou)
-	if indice_selecionado != -1:
-		validar_selecao_atual(player)
-
-# --- NOVA LÓGICA DE SELEÇÃO ---
-
-func _on_slot_clicked(indice, botao_mouse):
-	var player = get_tree().get_first_node_in_group("player")
-	# Se clicar com botão direito, já dropa direto (atalho)
-	if botao_mouse == MOUSE_BUTTON_RIGHT:
-		var slot_data = player.inventario[indice]
-		if slot_data: dropar_item_logica(player, slot_data, indice)
-		return
-
-	# Seleção normal com botão esquerdo
-	indice_selecionado = indice
-	atualizar_painel_detalhes(player)
-
-func atualizar_painel_detalhes(player):
-	var dados = player.inventario[indice_selecionado]
-	
-	if dados == null:
-		painel_detalhes.visible = false
-		return
-		
-	painel_detalhes.visible = true
-	var item = dados["item"]
-	
-	# === ADIÇÃO DA IMAGEM AQUI ===
-	# Pega a textura do item e aplica no TextureRect do painel de detalhes
-	label_icone_detalhe.texture = item.icone
-	# =============================
-	
-	# Preenche Textos
-	# (Verifique se seus Labels no Inspector têm Autowrap ligado para a descrição não vazar)
-	label_nome_detalhe.text = item.nome
-	if "descricao" in item:
-		label_desc_detalhe.text = item.descricao
-	else:
-		label_desc_detalhe.text = "Sem descrição."
-		
-	# LÓGICA DO TEXTO DO BOTÃO
-	if item.tipo == "consumivel":
-		btn_acao.text = "Usar"
-		
-	elif item.tipo == "arma":
-		# Verifica se ESSA arma específica está equipada
-		if player.is_weapon_equipped and player.arma_equipada_ref == item:
-			btn_acao.text = "Desequipar"
+				slot_ui.visible = false 
 		else:
-			btn_acao.text = "Equipar"
+			slot_ui.update_slot(null, 0)
+
+func update_chest_grid():
+	if not current_chest_ref or not mode_chest_grid: return
 	
+	# Limpa grid antigo
+	for child in mode_chest_grid.get_children():
+		child.queue_free()
+		
+	var chest_inv = current_chest_ref.chest_inventory
+	
+	# Cria novos slots
+	for i in range(chest_inv.size()):
+		var new_slot = SLOT_SCENE.instantiate()
+		mode_chest_grid.add_child(new_slot)
+		
+		new_slot.slot_index = i
+		new_slot.slot_clicked.connect(_on_slot_clicked.bind("CHEST"))
+		
+		if chest_inv[i]:
+			new_slot.update_slot(chest_inv[i]["item"], chest_inv[i]["quantity"])
+		else:
+			new_slot.update_slot(null, 0)
+
+# ==============================================================================
+# INTERACTIONS
+# ==============================================================================
+
+func _on_slot_clicked(index, mouse_button, origin):
+	
+	# DIREITO: Transfere ou Usa
+	if mouse_button == MOUSE_BUTTON_RIGHT:
+		if current_filter == "chest" and current_chest_ref:
+			if origin == "PLAYER":
+				transfer_item(player_ref.inventory, current_chest_ref.chest_inventory, index)
+			else:
+				transfer_item(current_chest_ref.chest_inventory, player_ref.inventory, index)
+			
+			update_player_grid("all")
+			update_chest_grid()
+		else:
+			if origin == "PLAYER":
+				player_ref.use_item(index)
+				update_player_grid(current_filter)
+				update_details_panel()
+		return
+
+	# ESQUERDO: Seleciona
+	if origin == "PLAYER":
+		selected_index = index
+		if current_filter != "chest":
+			update_details_panel()
+
+# ==============================================================================
+# TRANSFER LOGIC
+# ==============================================================================
+
+func transfer_item(source_array, target_array, src_idx):
+	var source_data = source_array[src_idx]
+	if source_data == null: return
+	
+	var item = source_data["item"]
+	var qty = source_data["quantity"]
+	var transferred = false
+	
+	if item.empilhavel:
+		for i in range(target_array.size()):
+			if target_array[i] and target_array[i]["item"] == item:
+				target_array[i]["quantity"] += qty
+				transferred = true
+				break
+	
+	if not transferred:
+		for i in range(target_array.size()):
+			if target_array[i] == null:
+				target_array[i] = { "item": item, "quantity": qty }
+				transferred = true
+				break
+	
+	if transferred:
+		source_array[src_idx] = null
 	else:
-		btn_acao.text = "Usar" # Padrão
+		print("Sem espaço no destino!")
 
-# --- AÇÕES DOS BOTÕES ---
+# ==============================================================================
+# DETAILS PANEL
+# ==============================================================================
 
-func _on_btn_acao_pressed():
-	if indice_selecionado == -1: return
+func update_details_panel():
+	var data = player_ref.inventory[selected_index]
 	
-	var player = get_tree().get_first_node_in_group("player")
-	# Usa a função do player que já lida com equipar/desequipar/consumir
-	player.usar_item_do_inventario(indice_selecionado)
+	if data == null:
+		if icon_detail: icon_detail.texture = null
+		if name_detail: name_detail.text = "Vazio"
+		if desc_detail: desc_detail.text = ""
+		container_buttons.visible = false
+		return
+		
+	container_buttons.visible = true
+	var item = data["item"]
 	
-	# Atualiza tudo
-	atualizar_grid()
-	validar_selecao_atual(player) # Re-checa o texto do botão (Equipar -> Desequipar)
+	if icon_detail: icon_detail.texture = item.icone
+	if name_detail: name_detail.text = item.nome
+	if desc_detail: desc_detail.text = item.get("descricao", "Sem descrição")
+	
+	if item.tipo == "arma":
+		if player_ref.equipped_weapon_ref == item:
+			btn_action.text = "Desequipar"
+		else:
+			btn_action.text = "Equipar"
+	else:
+		btn_action.text = "Usar"
+
+func _on_btn_action_pressed():
+	if selected_index == -1: return
+	player_ref.use_item(selected_index)
+	update_player_grid(current_filter)
+	update_details_panel()
 
 func _on_btn_drop_pressed():
-	if indice_selecionado == -1: return
-	var player = get_tree().get_first_node_in_group("player")
-	var dados = player.inventario[indice_selecionado]
-	
-	if dados:
-		dropar_item_logica(player, dados, indice_selecionado)
+	if selected_index == -1: return
+	var data = player_ref.inventory[selected_index]
+	if data:
+		drop_item_logic(player_ref, data, selected_index)
 
-# Lógica de Drop separada para reusar no clique direito
-func dropar_item_logica(player, dados, indice):
-	# 1. Instancia o Drop no Mundo
-	if CENA_DROP:
-		var novo_drop = CENA_DROP.instantiate()
-		# Verifica se a cena de drop tem script com função 'configurar'
-		if novo_drop.has_method("configurar"):
-			novo_drop.configurar(dados["item"], dados["quantidade"])
+# ==============================================================================
+# PHYSICS DROP
+# ==============================================================================
+
+func drop_item_logic(player, data, index):
+	if DROP_SCENE:
+		var new_drop = DROP_SCENE.instantiate()
+		if new_drop.has_method("configurar"):
+			new_drop.configurar(data["item"], data["quantity"])
 		
-		# Posição na frente do player
 		var spawn_pos = player.global_position + (player.global_transform.basis.z * 1.5)
-		spawn_pos.y += 0.5
-		novo_drop.global_position = spawn_pos
-		get_tree().current_scene.add_child(novo_drop)
-	
-	# 2. Se for arma equipada, desequipa
-	if dados["item"].tipo == "arma" and player.arma_equipada_ref == dados["item"]:
-		player.desequipar_arma()
+		spawn_pos.y += 0.5 
+		new_drop.global_position = spawn_pos
 		
-	# 3. Limpa inventário
-	player.inventario[indice] = null
+		get_tree().current_scene.add_child(new_drop)
+		
+		if new_drop is RigidBody3D:
+			var throw_dir = (spawn_pos - player.global_position).normalized()
+			var random_dir = Vector3(randf_range(-0.2, 0.2), 0.2, randf_range(-0.2, 0.2))
+			var impulse = (throw_dir + random_dir) * 5.0
+			new_drop.apply_central_impulse(impulse)
+			new_drop.apply_torque_impulse(Vector3.ONE * randf_range(-2.0, 2.0))
 	
-	# 4. Atualiza UI
-	painel_detalhes.visible = false # Fecha painel pois item sumiu
-	indice_selecionado = -1
-	atualizar_grid()
-
-func validar_selecao_atual(player):
-	# Verifica se o item selecionado ainda existe ou mudou de estado
-	var dados = player.inventario[indice_selecionado]
-	if dados == null:
-		painel_detalhes.visible = false
-		indice_selecionado = -1
-	else:
-		# Atualiza o texto do botão (caso tenha mudado de Equipar para Desequipar)
-		atualizar_painel_detalhes(player)
+	if data["item"].tipo == "arma" and player.equipped_weapon_ref == data["item"]:
+		player.unequip_weapon()
+		
+	player.inventory[index] = null
+	
+	update_player_grid(current_filter)
+	update_details_panel()

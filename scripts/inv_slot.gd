@@ -1,34 +1,41 @@
 extends Panel
 
-@onready var visual_icone = $IconeItem
-@onready var visual_qtd = $Amount
-@onready var visual_name = $Name # Certifique-se que o Label no Godot chama "Name"
+# Referências Visuais (Mantive os nomes dos Nós como no Godot para não quebrar)
+@onready var visual_icon = $IconeItem
+@onready var visual_qty = $Amount
+@onready var visual_name = $Name 
 
-signal slot_clicado(meu_indice)
-var item_armazenado = null
-var indice_slot 
+# SINAL PADRONIZADO (Inglês)
+# Envia o índice e qual botão do mouse foi apertado
+signal slot_clicked(index, mouse_button)
 
-func atualizar_slot(item: ItemData, quantidade: int):
+var stored_item = null
+var slot_index: int = 0
+
+func update_slot(item: ItemData, quantity: int):
+	stored_item = item 
+	
 	if item == null:
-		visual_icone.visible = false
-		visual_qtd.visible = false
-		visual_name.visible = false # Esconde o nome se não tiver item
+		visual_icon.visible = false
+		visual_qty.visible = false
+		visual_name.visible = false 
 	else:
-		visual_icone.visible = true
-		visual_icone.texture = item.icone
+		visual_icon.visible = true
+		# Obs: Mantive item.icone e item.nome em PT pois vêm do Resource (ItemData)
+		visual_icon.texture = item.icone 
 		
-		# === AQUI ESTAVA FALTANDO ===
 		visual_name.visible = true
-		visual_name.text = item.nome # Pega o nome direto do recurso do item
-		# ============================
+		visual_name.text = item.nome 
 		
-		if item.empilhavel and quantidade > 1:
-			visual_qtd.visible = true
-			visual_qtd.text = str(quantidade)
+		# Obs: Mantive item.empilhavel em PT
+		if item.empilhavel and quantity > 1:
+			visual_qty.visible = true
+			visual_qty.text = str(quantity)
 		else:
-			visual_qtd.visible = false
+			visual_qty.visible = false
 
 func _on_button_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
-		if item_armazenado:
-			slot_clicado.emit(indice_slot, event.button_index)
+		# Verifica se tem item antes de emitir o sinal (Lógica original mantida)
+		if stored_item:
+			slot_clicked.emit(slot_index, event.button_index)
