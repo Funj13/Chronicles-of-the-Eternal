@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dpcnt5dro17dw"]
+
+[ext_resource type="Script" uid="uid://b7i601rr24wwx" path="res://scripts/floating_text.gd" id="1_2fk3t"]
+
+[node name="FloatingTextRoot" type="Marker3D"]
+script = ExtResource("1_2fk3t")
+
+[node name="Label3D" type="Label3D" parent="."]
+billboard = 1
+modulate = Color(0.9132015, 0, 0.1956616, 1)
+text = "999999"

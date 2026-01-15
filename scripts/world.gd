@@ -26,7 +26,7 @@ func spawnar_player():
 	var path = GameData.CHAR_SCENES[choice]
 	
 	# 3. Carrega a cena do HD para a memória
-	var player_scene = load(path) # <--- FALTAVA ISSO!
+	var player_scene = load(path) 
 	
 	# 4. Cria a cópia (instância) para colocar no jogo
 	var player_instance = player_scene.instantiate()

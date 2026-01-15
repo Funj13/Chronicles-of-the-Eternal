@@ -1,15 +1,17 @@
-[gd_scene load_steps=4 format=3 uid="uid://byin8wmhdeo0w"]
+[gd_scene load_steps=6 format=3 uid="uid://byin8wmhdeo0w"]
 
 [ext_resource type="Script" uid="uid://b03xoaomsdmeh" path="res://scripts/inv_slot.gd" id="1_p5h00"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hhcjw"]
-bg_color = Color(0.021569123, 0.021569123, 0.021569123, 0.08235294)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
+bg_color = Color(0.35686275, 0.36078432, 0.30588236, 0)
+draw_center = false
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.35686275, 0.36078432, 0.30588236, 1)
 border_blend = true
+corner_detail = 1
 expand_margin_left = 2.0
 expand_margin_top = 2.0
 expand_margin_right = 2.0
@@ -18,10 +20,19 @@ expand_margin_bottom = 2.0
 [sub_resource type="Theme" id="Theme_p5h00"]
 default_font_size = 10
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p5h00"]
+bg_color = Color(1, 0.9764706, 0.8901961, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_p5h00"]
+font_size = 8
+
 [node name="Slot" type="Panel"]
 custom_minimum_size = Vector2(64, 64)
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = -1
+anchor_right = 0.056
+anchor_bottom = 0.09900001
+offset_right = -24.512001
+offset_bottom = -24.152008
 theme_override_styles/panel = SubResource("StyleBoxFlat_hhcjw")
 script = ExtResource("1_p5h00")
 
@@ -50,7 +61,18 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/pressed = SubResource("StyleBoxFlat_p5h00")
 flat = true
 metadata/_edit_use_anchors_ = true
+
+[node name="Name" type="Label" parent="."]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 53.0
+offset_right = 62.0
+offset_bottom = 65.0
+text = "TESTE"
+label_settings = SubResource("LabelSettings_p5h00")
+clip_text = true
 
 [connection signal="gui_input" from="Button" to="." method="_on_button_gui_input"]
