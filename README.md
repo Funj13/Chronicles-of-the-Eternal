@@ -29,27 +29,21 @@ _(Clique acima para ver o histórico de versões e links de download)_
 
 Este repositório serve como um **Devlog (Diário de Desenvolvimento)** e documentação das atualizações.
 
-### ✨ Novas Funcionalidades (v5.0-Alpha)
-- **Novo Inimigo (Zumbi):** Implementação do primeiro mob hostil utilizando modelo estilo Anime (VRoid).
-<img width="903" height="483" alt="image" src="https://github.com/user-attachments/assets/edbb5b5c-db5e-4fa0-b5ad-0a08140628a5" />
+### ✨ Novas Funcionalidades (v6.0-Alpha)
 
-- **Sistema de IA Básica:** Inimigo persegue o jogador quando detectado e possui física de gravidade.
-- **Sistema de Dano Real:**
-  - Implementação de **Hitbox** (Espada) e **Hurtbox** (Inimigo).
-  - Feedback visual e físico (Knockback) ao acertar o inimigo.
-  
-![gif-attack ‐ Feito com o Clipchamp](https://github.com/user-attachments/assets/c133b843-60b4-4f01-854e-547593b7b854)
+#### 🎒 Inventory UI 2.0 (Visual Overhaul)
+<img width="628" height="452" alt="image" src="https://github.com/user-attachments/assets/0016b84e-5e62-4aac-ae5d-c37b2ccee8d6" />
 
-- **Animações Reativas:**
-  - Máquina de estados para: `Idle` (Parado), `Run` (Perseguição), `Hit` (Dano) e `Death` (Morte).
-  - Integração de animações Mixamo com esqueleto VRoid via BoneMap.
- 
-![gif-death ‐ Feito com o Clipchamp](https://github.com/user-attachments/assets/ebd939f9-3034-4f2d-8cce-a49b69639c7a)
+- **Estética "Tech-Ruins":** Nova paleta de cores baseada em equipamentos militares antigos e interfaces digitais desgastadas.
+- **Painel de Detalhes Dinâmico:** Ao clicar em um item, o painel lateral exibe:
+  - Ícone em alta resolução (Preparado para visualização 3D/Holográfica).
+  - Descrição completa com *text wrapping* automático.
+  - Botões de ação contextuais.
+- **Lógica de Botões Inteligentes:**
+  - O botão de ação muda dinamicamente entre **"Equipar"**, **"Desequipar"** e **"Usar"** baseando-se no tipo do item (Arma vs Consumível) e no estado atual do Player.
+<img width="818" height="451" alt="image" src="https://github.com/user-attachments/assets/64c27a99-ef2b-4896-bee0-a90491439ca1" />
 
 
-### 🛠️ Melhorias Técnicas
-- **Refatoração de Colisão:** Ajuste nas *Collision Layers* para evitar que o Player cause dano a si mesmo.
-- **Pipeline de Importação:** Correção de *Retargeting* de ossos para compatibilidade Godot 4 Humanoid.
 
 
 ## ✨ Funcionalidades Atuais
@@ -69,7 +63,15 @@ O jogo está em estágio **Alpha**, com as seguintes mecânicas já implementada
 ### 🎮 Gameplay Core
 - **Movimentação:** Controle em terceira pessoa fluido.
 - **HUD:** Interface de usuário com barras de Vida, XP e Ouro.
+- **Novo Inimigo (Zumbi):** Implementação do primeiro mob hostil utilizando modelo estilo Anime (VRoid).
 
+- **Sistema de IA Básica:** Inimigo persegue o jogador quando detectado e possui física de gravidade.
+- **Sistema de Dano Real:**
+  - Implementação de **Hitbox** (Espada) e **Hurtbox** (Inimigo).
+  - Feedback visual e físico (Knockback) ao acertar o inimigo.
+- **Animações Reativas:**
+  - Máquina de estados para: `Idle` (Parado), `Run` (Perseguição), `Hit` (Dano) e `Death` (Morte).
+  - Integração de animações Mixamo com esqueleto VRoid via BoneMap.
 ---
 
 ## 📸 Galeria (Devlog)
@@ -85,10 +87,10 @@ O jogo está em estágio **Alpha**, com as seguintes mecânicas já implementada
 - [x] Movimentação Básica e Câmera
 - [x] Sistema de UI e Menu Principal
 - [x] Inventário Completo e Loot
-- [ ] **Tooltip (Informação de Itens)** 🚧 *Em Breve*
-- [ ] **Inimigos e IA Básica** 🚧 *Em Breve*
-- [ ] Sistema de Quests
-- [ ] Save/Load System
+- [x] Tooltip (Informação de Itens)
+- [x] Inimigos e IA Básica
+- [ ] **Sistema de Quests** 🚧 *Em Breve*
+- [ ] **Save/Load System** 🚧 *Em Breve*
 
 ---
 
