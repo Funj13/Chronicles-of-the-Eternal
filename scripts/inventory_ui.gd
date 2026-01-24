@@ -19,7 +19,7 @@ const SLOT_SCENE = preload("res://Scenes/slot.tscn")
 
 # --- DETALHES (DIREITA - MODO 1) ---
 # Referência ao PAI de todos os detalhes
-@onready var mode_details_root = $Menu_Detalhes 
+@onready var mode_details_root = $Menu_Detalhes
 
 # Filhos dentro de Menu_Detalhes
 @onready var icon_detail = $Menu_Detalhes/Slot99/IconeItem
@@ -241,27 +241,39 @@ func transfer_item(source_array, target_array, src_idx):
 	else:
 		print("Sem espaço no destino!")
 
-# ==============================================================================
+# # ==============================================================================
 # DETAILS PANEL
 # ==============================================================================
 
 func update_details_panel():
+	# Se nenhum item estiver selecionado ou o índice for inválido
+	if selected_index == -1 or selected_index >= player_ref.inventory.size():
+		limpar_detalhes()
+		return
+
 	var data = player_ref.inventory[selected_index]
 	
 	if data == null:
-		if icon_detail: icon_detail.texture = null
-		if name_detail: name_detail.text = "Vazio"
-		if desc_detail: desc_detail.text = ""
-		container_buttons.visible = false
+		limpar_detalhes()
 		return
 		
 	container_buttons.visible = true
 	var item = data["item"]
 	
+	# --- CORREÇÃO AQUI ---
+	# Acessamos as propriedades direto (item.icone, item.nome, item.descricao)
 	if icon_detail: icon_detail.texture = item.icone
 	if name_detail: name_detail.text = item.nome
-	if desc_detail: desc_detail.text = item.get("descricao", "Sem descrição")
 	
+	# Removemos o .get() e acessamos direto. 
+	# Se a descrição estiver vazia, colocamos um texto padrão manualmente.
+	if desc_detail: 
+		if item.descricao != "":
+			desc_detail.text = item.descricao
+		else:
+			desc_detail.text = "Sem descrição disponível."
+	
+	# Lógica do Botão de Ação
 	if item.tipo == "arma":
 		if player_ref.equipped_weapon_ref == item:
 			btn_action.text = "Desequipar"
@@ -269,6 +281,13 @@ func update_details_panel():
 			btn_action.text = "Equipar"
 	else:
 		btn_action.text = "Usar"
+
+# Função auxiliar para limpar a tela (evita repetir código)
+func limpar_detalhes():
+	if icon_detail: icon_detail.texture = null
+	if name_detail: name_detail.text = "Vazio"
+	if desc_detail: desc_detail.text = ""
+	container_buttons.visible = false
 
 func _on_btn_action_pressed():
 	if selected_index == -1: return
@@ -287,24 +306,35 @@ func _on_btn_drop_pressed():
 # ==============================================================================
 
 func drop_item_logic(player, data, index):
-	if DROP_SCENE:
-		var new_drop = DROP_SCENE.instantiate()
-		if new_drop.has_method("configurar"):
-			new_drop.configurar(data["item"], data["quantity"])
-		
-		var spawn_pos = player.global_position + (player.global_transform.basis.z * 1.5)
-		spawn_pos.y += 0.5 
+	if not DROP_SCENE: return
+
+	# 1. Cria o objeto
+	var new_drop = DROP_SCENE.instantiate()
+	get_tree().current_scene.add_child(new_drop)
+	
+	# 2. Passa os dados
+	if new_drop.has_method("configurar"):
+		new_drop.configurar(data["item"], data["quantity"])
+	
+	# 3. Define a Posição (Na frente do player)
+	var spawn_pos = player.global_position + (player.global_transform.basis.z * 1.5)
+	
+	# Se for Area3D (flutuante), coloca na altura do peito, senão no chão
+	if new_drop is Area3D:
+		spawn_pos.y += 1.0 
+	else:
+		spawn_pos.y += 0.5
+
+	# Aplica a posição com segurança
+	if new_drop is Node3D:
 		new_drop.global_position = spawn_pos
 		
-		get_tree().current_scene.add_child(new_drop)
-		
+		# 4. Só aplica FORÇA se for um corpo físico (RigidBody)
 		if new_drop is RigidBody3D:
 			var throw_dir = (spawn_pos - player.global_position).normalized()
-			var random_dir = Vector3(randf_range(-0.2, 0.2), 0.2, randf_range(-0.2, 0.2))
-			var impulse = (throw_dir + random_dir) * 5.0
-			new_drop.apply_central_impulse(impulse)
-			new_drop.apply_torque_impulse(Vector3.ONE * randf_range(-2.0, 2.0))
+			new_drop.apply_central_impulse(throw_dir * 5.0)
 	
+	# 5. Remove do inventário e atualiza arma
 	if data["item"].tipo == "arma" and player.equipped_weapon_ref == data["item"]:
 		player.unequip_weapon()
 		

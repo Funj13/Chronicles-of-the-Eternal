@@ -1,4 +1,4 @@
-[gd_scene load_steps=94 format=4 uid="uid://cthomxubocj2"]
+[gd_scene load_steps=91 format=4 uid="uid://cthomxubocj2"]
 
 [ext_resource type="Script" uid="uid://dtn7pi7r6jaia" path="res://scripts/world.gd" id="1_26xuy"]
 [ext_resource type="Texture2D" uid="uid://b1o2p8mjfg83t" path="res://terrain/world_slot0_albedo_bump.png" id="1_cbp6q"]
@@ -17,11 +17,11 @@
 [ext_resource type="Texture2D" uid="uid://bfbkvm2hlwfpr" path="res://Objects_Cenary/anime_medieval_house_1.jpg" id="9_gggvi"]
 [ext_resource type="Texture2D" uid="uid://oqd7xi7gxsu1" path="res://Objects_Cenary/anime_medieval_house_2.jpg" id="10_w44yn"]
 [ext_resource type="Texture2D" uid="uid://bskmmyyfqrivu" path="res://Objects_Cenary/anime_medieval_house_3.jpg" id="11_6ah6f"]
-[ext_resource type="Script" uid="uid://cio2i66q3lxcy" path="res://scripts/GameResourceInterface.gd" id="11_ic0uy"]
 [ext_resource type="Texture2D" uid="uid://p30ewt24jrrm" path="res://Objects_Cenary/anime_medieval_house_4.jpg" id="12_g1i3r"]
 [ext_resource type="Script" uid="uid://dbtwvfm54h0mr" path="res://scripts/item_data.gd" id="18_wjb0r"]
 [ext_resource type="PackedScene" uid="uid://bgu4q1upruygh" path="res://UI/inventory_ui.tscn" id="19_bc84e"]
 [ext_resource type="Script" uid="uid://bbsap1ymgktev" path="res://scripts/bau.gd" id="20_bc84e"]
+[ext_resource type="PackedScene" uid="uid://d4esd54wgwy5w" path="res://Scenes/UI_Stats.tscn" id="21_mc2jv"]
 [ext_resource type="Resource" uid="uid://bw6e5n1pd72jx" path="res://Assets/Itens/PocaoVida.tres" id="22_wukud"]
 [ext_resource type="Resource" uid="uid://cx754w3hqabhx" path="res://Assets/Itens/EspadaFerro.tres" id="23_il2jm"]
 
@@ -620,75 +620,6 @@ data = PackedVector3Array(4.334, -0.55759996, -0.0033, 4.3985, -0.55759996, -0.0
 
 [sub_resource type="BoxMesh" id="BoxMesh_26xuy"]
 
-[sub_resource type="Animation" id="Animation_bc84e"]
-resource_name = "abrir"
-tracks/0/type = "bezier"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Tampa:rotation:x")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0.87931424, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/1/type = "bezier"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Tampa:rotation:y")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/2/type = "bezier"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Tampa:rotation:z")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/3/type = "bezier"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Tampa:position:x")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0.0018128753, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/4/type = "bezier"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Tampa:position:y")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0.68221664, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-tracks/5/type = "bezier"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("Tampa:position:z")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"handle_modes": PackedInt32Array(0),
-"points": PackedFloat32Array(0.2918396, -0.25, 0, 0.25, 0),
-"times": PackedFloat32Array(0)
-}
-
 [sub_resource type="Animation" id="Animation_wukud"]
 length = 0.001
 tracks/0/type = "bezier"
@@ -758,18 +689,80 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0)
 }
 
+[sub_resource type="Animation" id="Animation_bc84e"]
+resource_name = "abrir"
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Tampa:rotation:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.87931424, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Tampa:rotation:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Tampa:rotation:z")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Tampa:position:x")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.0018128753, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Tampa:position:y")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.68221664, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Tampa:position:z")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.2918396, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_il2jm"]
 _data = {
 &"RESET": SubResource("Animation_wukud"),
 &"abrir": SubResource("Animation_bc84e")
 }
-
-[sub_resource type="CanvasTexture" id="CanvasTexture_k3n1d"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k3n1d"]
-bg_color = Color(0.521141, 0.521141, 0.52114, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2o6r5"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_tlwt5"]
 
@@ -1078,63 +1071,7 @@ libraries = {
 
 [node name="Overlay" type="CanvasLayer" parent="."]
 
-[node name="GameResourceUi" type="Control" parent="Overlay"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 3.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("11_ic0uy")
-
-[node name="TextureRect" type="TextureRect" parent="Overlay/GameResourceUi"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 0.062
-anchor_bottom = 0.105
-offset_right = 0.389999
-offset_bottom = -0.0400009
-texture = SubResource("CanvasTexture_k3n1d")
-
-[node name="Life_Bar" type="ProgressBar" parent="Overlay/GameResourceUi/TextureRect"]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 4.111
-anchor_bottom = 1.0
-offset_top = -1.0
-offset_right = 0.00799561
-theme_override_styles/background = SubResource("StyleBoxFlat_k3n1d")
-theme_override_styles/fill = SubResource("StyleBoxFlat_2o6r5")
-
-[node name="Control" type="Control" parent="Overlay/GameResourceUi/TextureRect/Life_Bar"]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/GameResourceUi"]
-layout_mode = 0
-offset_left = -1.0
-offset_top = 90.0
-offset_right = 81.0
-offset_bottom = 130.0
-
-[node name="Gold_Label" type="Label" parent="Overlay/GameResourceUi/VBoxContainer"]
-layout_mode = 2
-text = "💰 0"
-
-[node name="Label_Level" type="Label" parent="Overlay/GameResourceUi/VBoxContainer"]
-layout_mode = 2
-text = "Nível: 1"
-
-[node name="XP_Bar" type="ProgressBar" parent="Overlay/GameResourceUi/VBoxContainer"]
-layout_mode = 2
+[node name="UI_Stats" parent="Overlay" instance=ExtResource("21_mc2jv")]
 
 [node name="MenuPause" type="Control" parent="Overlay" groups=["ui_pause"]]
 process_mode = 2
@@ -1192,7 +1129,6 @@ layout_mode = 2
 text = "Sair do Jogo"
 
 [node name="InventoryUI" parent="Overlay" instance=ExtResource("19_bc84e")]
-visible = false
 
 [node name="luz" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_036b0")

@@ -4,6 +4,8 @@ extends CharacterBody3D
 # SIGNALS (UI COMMUNICATION)
 #==============================================================================#
 signal health_changed(new_health, max_health)
+signal mana_changed(new_mana, max_mana)          # --- NOVO ---
+signal stats_updated(total_defense, total_attack) # --- NOVO ---
 signal gold_changed(new_gold)
 signal xp_changed(new_xp, max_xp)
 signal level_changed(new_level)
@@ -13,7 +15,7 @@ signal level_changed(new_level)
 #==============================================================================#
 
 @export_category("Movement")
-@export var velocidade_andar = 1.0 # Mantive export em PT para não perder valores no Editor
+@export var velocidade_andar = 1.0
 @export var velocidade_corrida = 3.0
 @export var velocidade_agachado = 1.0
 @export var forca_pulo = 4.0
@@ -28,8 +30,15 @@ var is_dashing := false
 @onready var dash_bubble = $corpo/DashBubble 
 @onready var camera_principal = $CameraRoot/CameraHorizontal/CameraVertical/SpringArm3D/Camera3D 
 
-# HEALTH
+# HEALTH & MANA (RPG)
 @onready var vida: GameResource = $Health
+# --- NOVO: Variáveis de Mana ---
+@export var max_mana: int = 50
+var current_mana: int = 50
+
+# RPG STATS (Calculados)
+var total_defense: int = 0  # --- NOVO ---
+var total_attack: int = 0   # --- NOVO ---
 
 # COMBAT & COMBO
 var combo_count = 0
@@ -40,7 +49,7 @@ var in_attack_cooldown := false
 # WEAPON STATE (INVENTORY)
 var is_weapon_equipped := false 
 var weapon_drawn := false 
-var equipped_weapon_ref: ItemData = null # Renomeado de 'arma_equipada_ref'
+var equipped_weapon_ref: ItemData = null
 
 @onready var hitbox_espada = $corpo/GeneralSkeleton/PontoAncoragemMao/weapon/Sketchfab_model/wado_fbx/RootNode/Box001/Object_4/ShapeKatana/HitboxArma
 
@@ -62,10 +71,10 @@ var was_on_floor := false
 @onready var raycast_interacao = $corpo/RayCast3D
 
 # --- INVENTORY SYSTEM ---
-var inventory = [] # Renomeado de 'inventario'
+var inventory = [] 
 
 #==============================================================================#
-# RPG STATS
+# RPG STATS BASE
 #==============================================================================#
 var level: int = 1
 var xp_atual: int = 0
@@ -85,14 +94,14 @@ func _ready():
 	animation_tree.active = true
 	vida.depleated.connect(_on_vida_zerada)
 	
+	# Inicializa Mana
+	current_mana = max_mana
+	
 	# UI INITIALIZATION
 	await get_tree().process_frame
 	
-	var vida_max = 100
-	if "max_amount" in vida:
-		vida_max = vida.max_amount
-		
-	health_changed.emit(vida.current_amount, vida_max)
+	notify_ui_update() # Atualiza Vida e Mana na UI
+	calculate_stats()  # Calcula Defesa/Ataque iniciais
 	atualizar_visual_armas()
 	
 	# Resize Inventory
@@ -165,6 +174,7 @@ func _input(event):
 		is_weapon_equipped = not is_weapon_equipped
 		weapon_drawn = false 
 		atualizar_visual_armas()
+		calculate_stats() # Recalcula se debuggar
 		print("Simulação: Arma equipada? ", is_weapon_equipped)
 		
 	# Interaction (E)
@@ -176,7 +186,7 @@ func _input(event):
 
 	if event.is_action_pressed("pause") or (event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE):
 		# Close Inventory if open
-		var inventario_ui = get_tree().get_first_node_in_group("ui_inventory") # Grupo atualizado
+		var inventario_ui = get_tree().get_first_node_in_group("ui_inventory")
 		if inventario_ui and inventario_ui.visible:
 			inventario_ui.close()
 			get_viewport().set_input_as_handled()
@@ -191,7 +201,7 @@ func _input(event):
 			get_node("/root/World/Overlay/MenuPause").toggle_pause_menu()
 
 func toggle_inventory():
-	var ui = get_tree().get_first_node_in_group("ui_inventory") # Grupo em inglês
+	var ui = get_tree().get_first_node_in_group("ui_inventory")
 	if ui:
 		if ui.visible:
 			ui.close()
@@ -201,9 +211,9 @@ func toggle_inventory():
 func tentar_interagir():
 	if raycast_interacao.is_colliding():
 		var objeto = raycast_interacao.get_collider()
-		if objeto.has_method("interact"): # Atualizado para inglês
+		if objeto.has_method("interact"): 
 			objeto.interact(self)
-		elif objeto.has_method("interagir"): # Compatibilidade com antigo
+		elif objeto.has_method("interagir"): 
 			objeto.interagir(self)
 
 #==============================================================================#
@@ -238,7 +248,6 @@ func atualizar_visual_armas():
 			visual_espada_mao.visible = false
 			visual_espada_costas.visible = true
 
-# Renomeado para inglês (InventoryUI chama isso)
 func unequip_weapon():
 	if is_weapon_equipped:
 		print("Unequipping weapon...")
@@ -246,6 +255,7 @@ func unequip_weapon():
 		weapon_drawn = false
 		equipped_weapon_ref = null
 		atualizar_visual_armas()
+		calculate_stats() # --- NOVO: Atualiza defesa/ataque ao tirar arma ---
 		
 func realizar_ataque_combo():
 	proximo_ataque_agendado = false
@@ -305,24 +315,65 @@ func toggle_hitbox(ligar: bool):
 	if not hitbox_espada: return
 	hitbox_espada.monitoring = ligar
 
-# === DAMAGE ===
+#==============================================================================#
+# DAMAGE & RPG CALCULATION (CORE)
+#==============================================================================#
+
+# --- NOVO: Função para calcular Ataque e Defesa Total ---
+func calculate_stats():
+	# 1. Base (Vem dos atributos)
+	total_attack = atributos["forca"]
+	total_defense = int(atributos["agilidade"] / 2) # Exemplo: Agilidade dá esquiva/defesa
+	
+	# 2. Soma Itens Equipados (Arma)
+	if is_weapon_equipped and equipped_weapon_ref:
+		total_attack += equipped_weapon_ref.dano
+		# Se a arma der defesa (ex: espada larga), soma aqui:
+		total_defense += equipped_weapon_ref.defesa 
+	
+	# 3. Futuro: Somar Armaduras (Quando tiver slot de corpo)
+	# if body_armor: total_defense += body_armor.defesa
+	
+	print("STATS: Defesa Total: ", total_defense, " | Ataque Total: ", total_attack)
+	stats_updated.emit(total_defense, total_attack)
+
 func receber_dano(quantidade: int):
 	face_manager.mudar_expressao("ou")
-	vida.decrease(quantidade)
 	
-	var max_v = 100
-	if "max_amount" in vida:
-		max_v = vida.max_amount
-	health_changed.emit(vida.current_amount, max_v)
+	# --- NOVO: Cálculo de Redução de Dano ---
+	var dano_real = max(1, quantidade - total_defense)
+	print("Dano recebido: ", quantidade, " - Defesa: ", total_defense, " = ", dano_real)
+	
+	vida.decrease(dano_real)
+	
+	# Atualiza a UI
+	notify_ui_update()
 
 func _on_vida_zerada():
 	print("Você morreu!")
 	get_tree().reload_current_scene()
 
+func notify_ui_update():
+	var max_v = 100
+	if "max_amount" in vida: max_v = vida.max_amount
+	
+	health_changed.emit(vida.current_amount, max_v)
+	mana_changed.emit(current_mana, max_mana)
+	level_changed.emit(level)
+	xp_changed.emit(xp_atual, xp_proximo_nivel)
+
+# --- NOVO: Função para usar mana ---
+func use_mana(amount: int) -> bool:
+	if current_mana >= amount:
+		current_mana -= amount
+		mana_changed.emit(current_mana, max_mana)
+		return true
+	return false
+
 #==============================================================================#
 # PROGRESSION AND INVENTORY
 #==============================================================================#
-func ganhar_xp(quantidade: int): # Pode mudar para gain_xp se quiser, mas atualize as chamadas
+func ganhar_xp(quantidade: int):
 	xp_atual += quantidade
 	xp_changed.emit(xp_atual, xp_proximo_nivel) 
 	if xp_atual >= xp_proximo_nivel: subir_nivel()
@@ -338,23 +389,22 @@ func subir_nivel():
 	if "max_amount" in vida:
 		vida.max_amount += 20 
 		vida.current_amount = vida.max_amount
-		health_changed.emit(vida.current_amount, vida.max_amount)
 	
-	level_changed.emit(level)
-	xp_changed.emit(xp_atual, xp_proximo_nivel) 
+	current_mana = max_mana # Recupera mana ao subir de nivel
+	
+	notify_ui_update()
+	calculate_stats() # Recalcula stats pois atributos mudaram
 
-# Renomeado para inglês
 func receive_gold(amount: int):
 	ouro += amount
 	gold_changed.emit(ouro)
 
-# Renomeado para inglês
 func add_item(item_novo: ItemData, qtd: int = 1) -> bool:
 	# 1. Empilhar
 	if item_novo.empilhavel:
 		for i in range(inventory.size()):
 			if inventory[i] != null and inventory[i]["item"] == item_novo:
-				inventory[i]["quantity"] += qtd # Atenção: "quantity" (inglês)
+				inventory[i]["quantity"] += qtd 
 				on_inventory_changed()
 				return true
 
@@ -366,25 +416,35 @@ func add_item(item_novo: ItemData, qtd: int = 1) -> bool:
 			return true
 	return false
 
-# Renomeado para inglês
 func on_inventory_changed():
 	var ui = get_tree().get_first_node_in_group("ui_inventory")
 	if ui and ui.visible: 
-		# Chama a função nova da UI com o filtro atual
 		ui.update_player_grid(ui.current_filter)
 
-# Renomeado para inglês
 func use_item(index):
 	var slot_data = inventory[index]
 	if slot_data == null: return
 	var item = slot_data["item"]
 	
 	if item.tipo == "consumivel":
-		if vida.current_amount < vida.max_amount:
+		var usou = false
+		
+		# Poção de Vida
+		if item.valor_efeito > 0 and vida.current_amount < vida.max_amount:
 			vida.increase(item.valor_efeito)
-			health_changed.emit(vida.current_amount, vida.max_amount)
+			usou = true
+		
+		# Poção de Mana (Novo)
+		if item.custo_mana < 0: # Se for negativo, recupera (hack) ou criar var recuperacao
+			# Se você adicionou 'recuperacao' no ItemData use: item.recuperacao
+			if current_mana < max_mana:
+				current_mana = min(max_mana, current_mana + 20) # Exemplo fixo ou use item.recuperacao
+				usou = true
+		
+		if usou:
 			slot_data["quantity"] -= 1
 			if slot_data["quantity"] <= 0: inventory[index] = null
+			notify_ui_update() # Atualiza barras
 			on_inventory_changed()
 
 	elif item.tipo == "arma":
@@ -395,8 +455,8 @@ func use_item(index):
 			weapon_drawn = false 
 			equipped_weapon_ref = item 
 			atualizar_visual_armas()
+			calculate_stats() # --- NOVO: Recalcula stats ao equipar ---
 		
-		# IMPORTANTE: Removi a linha que fechava o inventário
 		on_inventory_changed()
 
 #==============================================================================#

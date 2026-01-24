@@ -1,0 +1,67 @@
+[gd_scene load_steps=5 format=3 uid="uid://0kbwxufrly14"]
+
+[ext_resource type="Script" uid="uid://cio2i66q3lxcy" path="res://scripts/GameResourceInterface.gd" id="1_t4yu6"]
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_k3n1d"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k3n1d"]
+bg_color = Color(0.521141, 0.521141, 0.52114, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2o6r5"]
+
+[node name="GameResourceUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_t4yu6")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.062
+anchor_bottom = 0.105
+offset_right = 0.389999
+offset_bottom = -0.0400009
+texture = SubResource("CanvasTexture_k3n1d")
+
+[node name="Life_Bar" type="ProgressBar" parent="TextureRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 4.111
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_right = 0.00799561
+theme_override_styles/background = SubResource("StyleBoxFlat_k3n1d")
+theme_override_styles/fill = SubResource("StyleBoxFlat_2o6r5")
+
+[node name="Control" type="Control" parent="TextureRect/Life_Bar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 90.0
+offset_right = 81.0
+offset_bottom = 130.0
+
+[node name="Gold_Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "💰 0"
+
+[node name="Label_Level" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Nível: 1"
+
+[node name="XP_Bar" type="ProgressBar" parent="VBoxContainer"]
+layout_mode = 2

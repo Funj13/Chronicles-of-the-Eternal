@@ -1,10 +1,18 @@
 extends Resource
 class_name ItemData
 
-@export var nome: String = "Nome do Item"
-@export_multiline var descricao: String = "Descrição do item aqui."
-@export var icone: Texture2D # A imagem que aparece no inventário
-@export var empilhavel: bool = false # Se for poção, marca true. Se for espada, false.
+@export_category("Visual")
+@export var nome: String = ""
+@export_multiline var descricao: String = ""
+@export var icone: Texture2D
 
-@export var tipo: String = "consumivel" # "consumivel", "arma", "chave"
-@export var valor_efeito: int = 0 # Quanto cura? Ou quanto dano dá?
+@export_category("Tipo")
+@export_enum("recurso", "equipamento", "consumivel", "arma") var tipo: String = "recurso"
+@export var empilhavel: bool = false
+
+# --- NOVO: ESTATÍSTICAS DE RPG ---
+@export_category("Estatísticas (RPG)")
+@export var defesa: int = 0         # Para armaduras/escudos
+@export var dano: int = 0           # Para armas
+@export var custo_mana: int = 0     # Se gastar magia
+@export var recuperacao: int = 0    # Se for poção (quanto cura)

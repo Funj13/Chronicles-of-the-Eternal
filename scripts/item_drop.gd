@@ -7,27 +7,30 @@ var quantidade: int = 1
 @onready var visual = $MeshInstance3D
 
 func _ready():
-	# Efeito visual: Faz o item flutuar e girar devagarzinho
-	var tween = create_tween().set_loops()
-	tween.tween_property(visual, "position:y", 0.2, 1.0).as_relative()
-	tween.tween_property(visual, "position:y", -0.2, 1.0).as_relative()
+	# Efeito visual: Faz o item flutuar e girar (Estilo Arcade)
+	if visual:
+		var tween = create_tween().set_loops()
+		tween.tween_property(visual, "position:y", 0.2, 1.0).as_relative()
+		tween.tween_property(visual, "position:y", -0.2, 1.0).as_relative()
 	
-	# Conecta o sinal de colisão via código (mais rápido que ir na aba Sinais)
 	body_entered.connect(_on_body_entered)
 
-# Função chamada por quem criou este drop (InventoryUI ou Inimigo)
 func configurar(item: ItemData, qtd: int):
 	item_data = item
 	quantidade = qtd
-	# Aqui você poderia mudar a cor da Mesh dependendo se é Raro ou Comum
+	# Dica: Se quiser mudar a textura da mesh baseado no ícone:
+	# if visual.material_override: visual.material_override.albedo_texture = item.icone
 
 func _on_body_entered(body):
+	# Verifica se é o player
 	if body.is_in_group("player"):
 		print("Tentando pegar do chão: ", item_data.nome)
 		
-		# Tenta devolver pra mochila
-		var pegou = body.adicionar_item(item_data, quantidade)
-		
-		if pegou:
-			# Toca um som aqui futuramente!
-			queue_free() # Destrói o objeto do chão
+		# --- CORREÇÃO IMPORTANTE AQUI ---
+		# Mudamos de 'adicionar_item' para 'add_item' para bater com o Player novo
+		if body.has_method("add_item"):
+			var pegou = body.add_item(item_data, quantidade)
+			
+			if pegou:
+				# Pode adicionar um som aqui: AudioStreamPlayer3D.play()
+				queue_free() # Some com o item do chão
