@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bgu4q1upruygh"]
+[gd_scene load_steps=28 format=3 uid="uid://bgu4q1upruygh"]
 
 [ext_resource type="Script" uid="uid://dpwd13mena1tg" path="res://scripts/inventory_ui.gd" id="1_4hlgy"]
 [ext_resource type="PackedScene" uid="uid://byin8wmhdeo0w" path="res://Scenes/slot.tscn" id="2_l6l0t"]
@@ -6,6 +6,7 @@
 [ext_resource type="FontFile" uid="uid://dt4sqs0ukx3h8" path="res://Fonts/CinzelDecorative-Black.ttf" id="3_dk10o"]
 [ext_resource type="Texture2D" uid="uid://c5qp4xvb6c32w" path="res://Assets/Architecture/bota-v2.png" id="5_jn8i4"]
 [ext_resource type="Texture2D" uid="uid://d0d6fqpuv6lb2" path="res://Assets/Architecture/Detail.png" id="6_7o5sx"]
+[ext_resource type="Texture2D" uid="uid://2mdqjlyi83un" path="res://Assets/Architecture/hud_chest.png" id="7_jn8i4"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7o5sx"]
 
@@ -14,6 +15,7 @@ bg_color = Color(0.08235294, 0.105882354, 0.09019608, 0)
 
 [sub_resource type="Theme" id="Theme_jn8i4"]
 default_font = ExtResource("3_dk10o")
+default_font_size = 25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nygdy"]
 bg_color = Color(0, 0, 0, 1)
@@ -61,27 +63,9 @@ texture = ExtResource("5_jn8i4")
 resource_local_to_scene = true
 texture = ExtResource("5_jn8i4")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6128g"]
-bg_color = Color(0, 0, 0, 0.7921569)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(0.8784314, 0.8235294, 0.70980394, 0.5803922)
-border_blend = true
-shadow_color = Color(0.8784314, 0.8235294, 0.70980394, 0.5803922)
-shadow_size = 5
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_a273u"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7o5sx"]
-bg_color = Color(0.8784314, 0.8235294, 0.70980394, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.8784314, 0.8235294, 0.70980394, 1)
-border_blend = true
-shadow_color = Color(0.8784314, 0.8235294, 0.70980394, 1)
-shadow_size = 5
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q4wdp"]
 
 [node name="InventoryUI" type="Control" groups=["ui_inventory"]]
 layout_mode = 3
@@ -405,7 +389,16 @@ offset_left = 737.0
 offset_top = 126.0
 offset_right = 989.0
 offset_bottom = 516.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_6128g")
+theme_override_styles/panel = SubResource("StyleBoxTexture_a273u")
+
+[node name="TextureRect" type="TextureRect" parent="Bau"]
+layout_mode = 0
+offset_left = -6.0
+offset_top = -27.0
+offset_right = 334.0
+offset_bottom = 438.0
+texture = ExtResource("7_jn8i4")
+expand_mode = 1
 
 [node name="Panel_Item" type="Panel" parent="Bau"]
 layout_mode = 1
@@ -415,17 +408,19 @@ anchor_bottom = 0.062000003
 offset_bottom = -0.1800003
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_7o5sx")
+theme_override_styles/panel = SubResource("StyleBoxTexture_q4wdp")
 
 [node name="Name_item" type="Label" parent="Bau/Panel_Item"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.059000004
-offset_left = 5.0
-offset_bottom = 20.584
+offset_left = 14.0
+offset_top = -6.0
+offset_right = 9.0
+offset_bottom = 27.584
 theme = SubResource("Theme_jn8i4")
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0.9843137, 0.94509804, 0.8392157, 1)
 theme_override_styles/focus = SubResource("StyleBoxFlat_nygdy")
 text = "Báu"
 
@@ -435,10 +430,10 @@ anchors_preset = -1
 anchor_top = 0.065000005
 anchor_right = 0.99200004
 anchor_bottom = 0.99700004
-offset_left = 18.0
-offset_top = 6.6499977
-offset_right = -14.984009
-offset_bottom = -39.830017
+offset_left = 32.0
+offset_top = 10.649998
+offset_right = -1.9840088
+offset_bottom = -38.830017
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/h_separation = 8
