@@ -3,6 +3,8 @@ extends Node3D # Já que você usou um Node3D
 # Arraste o nó "FaceAnimationPlayer" para cá no Inspector
 @export var anim_player: AnimationPlayer 
 
+
+
 var timer_piscar = Timer.new()
 var expressao_atual = "neutral"
 
