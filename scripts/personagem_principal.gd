@@ -338,7 +338,7 @@ func calculate_stats():
 	stats_updated.emit(total_defense, total_attack)
 
 func receber_dano(quantidade: int):
-	face_manager.mudar_expressao("ou")
+	#face_manager.mudar_expressao("ou")
 	
 	# --- NOVO: Cálculo de Redução de Dano ---
 	var dano_real = max(1, quantidade - total_defense)
@@ -569,3 +569,7 @@ func executar_dash():
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	pass
+
+
+func _on_face_animation_player_animation_finished(anim_name: StringName) -> void:
+	pass # Replace with function body.
