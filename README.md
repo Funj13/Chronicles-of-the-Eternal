@@ -25,7 +25,9 @@ _(Clique acima para ver o histórico de versões e links de download)_
 ---
 
 ## 📜 Sobre o Projeto
-**Chronicles of the Eternal** é um projeto de RPG de ação em terceira pessoa, focado em criar uma experiência imersiva com estilo visual de Anime. O jogo está sendo construído do zero utilizando a **Godot Engine 4**, com o objetivo de documentar e aprimorar habilidades em desenvolvimento de jogos, design de sistemas e lógica de programação.
+**Chronicles of the Eternal** é um projeto de RPG de ação em terceira pessoa, focado em criar uma experiência imersiva com estilo visual de Anime. O jogo estava sendo construído do zero utilizando a **Godot Engine 4**, com o objetivo de documentar e aprimorar habilidades em desenvolvimento de jogos, design de sistemas e lógica de programação.
+
+Após alguns meses de trabalho CLT e muita dedicação na faculdade, montei um PC gamer para voltar ao desenvolvimento em uma engine mais parruda. Agora o jogo está sendo refeito dentro da Unreal Engine 5.
 
 Este repositório serve como um **Devlog (Diário de Desenvolvimento)** e documentação das atualizações.
 
