@@ -5,9 +5,9 @@
 # ⚔️ Chronicles of the Eternal
 ### Um RPG de Ação 3D desenvolvido na Godot Engine 4
 
-![Badge em Desenvolvimento](https://img.shields.io/badge/Status-Em_Desenvolvimento-yellow?style=for-the-badge)
+![Badge em Desenvolvimento](https://img.shields.io/badge/Status-Abandonado-yellow?style=for-the-badge)
 ![Badge Godot](https://img.shields.io/badge/Engine-Godot_4-blue?style=for-the-badge&logo=godot-engine)
-![Badge Versão](https://img.shields.io/badge/Versão_Atual-v4.5_Alpha-orange?style=for-the-badge)
+![Badge Versão](https://img.shields.io/badge/Versão_Atual-v6.8_Alpha-orange?style=for-the-badge)
 
 <br />
 
