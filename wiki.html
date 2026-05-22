@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Chronicles of the Eternal - Wiki</title>
+
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+        <style>
+            .font-poppins { font-family: 'Poppins', sans-serif; }
+            html { scroll-behavior: smooth; }
+            
+            /* Estilização para o texto da Wiki */
+            .wiki-content h2 { font-size: 1.5rem; font-weight: 700; color: white; margin-top: 1.5rem; margin-bottom: 0.75rem; border-bottom: 1px solid rgba(75, 85, 99, 0.5); padding-bottom: 0.5rem; }
+            .wiki-content p { color: #d1d5db; line-height: 1.75; margin-bottom: 1rem; }
+            .wiki-content ul { list-style-type: disc; margin-left: 1.5rem; color: #d1d5db; margin-bottom: 1rem; }
+            .wiki-content li { margin-bottom: 0.5rem; }
+            .wiki-content strong { color: #f9a8d4; } /* Destaca textos em negrito com rosa */
+        </style>
+    </head>
+    <body class="font-sans antialiased">
+        <div class="font-poppins bg-gray-900 text-gray-100 min-h-screen relative overflow-hidden flex flex-col">
+            
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none fixed"></div>
+            <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+            <nav x-data="{ open: false }" class="absolute w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-700/50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between h-20 items-center">
+                        <div class="hidden md:flex space-x-8 items-center">
+                            <a href="#" class="text-gray-300 hover:text-white transition">Início</a>
+                            <a href="index.html" class="text-gray-300 hover:text-white transition">Changelog</a>
+                            <a href="wiki.html" class="text-pink-400 font-semibold hover:text-pink-300 transition">Wiki</a>
+                        </div>
+
+                        <div class="flex-shrink-0 flex items-center justify-center">
+                            <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 uppercase tracking-widest drop-shadow-lg text-center">
+                                Chronicles of the Eternal
+                            </span>
+                        </div>
+
+                        <div class="hidden md:flex space-x-8 items-center">
+                            <a href="sobre.html" class="text-gray-300 hover:text-white transition">Sobre</a>
+                            <a href="https://github.com/Funj13/Chronicles-of-the-Eternal" target="_blank" class="bg-gradient-to-r from-purple-600 to-pink-600 px-5 py-2 rounded-full font-semibold hover:from-purple-500 hover:to-pink-500 shadow-lg shadow-purple-500/30 transition transform hover:-translate-y-0.5">
+                                Ver no GitHub
+                            </a>
+                        </div>
+
+                        <div class="-mr-2 flex items-center md:hidden">
+                            <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition">
+                                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                    <path :class="{'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                    <path :class="{'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div :class="{'block': open, 'hidden': !open}" class="md:hidden bg-gray-900 border-b border-gray-700">
+                    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                        <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Changelog</a>
+                        <a href="wiki.html" class="block px-3 py-2 rounded-md text-base font-medium text-pink-400 bg-gray-800">Wiki</a>
+                        <a href="sobre.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Sobre</a>
+                        <a href="https://github.com/Funj13/Chronicles-of-the-Eternal" target="_blank" class="block px-3 py-2 mt-2 text-center rounded-md text-base font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white">Ver no GitHub</a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="pt-32 pb-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex-grow w-full">
+                
+                <div class="mb-8 relative">
+                    <input type="text" placeholder="Pesquisar na Wiki..." class="w-full bg-gray-800/60 border border-gray-700 text-gray-200 rounded-xl px-5 py-3 pl-12 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors backdrop-blur-sm">
+                    <svg class="w-5 h-5 absolute left-4 top-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+
+                <div class="flex flex-col lg:flex-row gap-8">
+                    
+                    <aside class="lg:w-1/4">
+                        <div class="bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl p-5 sticky top-24 shadow-xl">
+                            <h3 class="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 mb-4 uppercase tracking-wider">Categorias</h3>
+                            
+                            <nav class="space-y-6">
+                                <div>
+                                    <h4 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Lore & História</h4>
+                                    <ul class="space-y-1">
+                                        <li><a href="#" class="block text-gray-300 hover:text-pink-400 hover:bg-gray-700/30 px-2 py-1.5 rounded transition">A Era dos Eternos</a></li>
+                                        <li><a href="#" class="block text-gray-300 hover:text-pink-400 hover:bg-gray-700/30 px-2 py-1.5 rounded transition">O Grande Colapso</a></li>
+                                        <li><a href="#" class="block text-gray-300 hover:text-pink-400 hover:bg-gray-700/30 px-2 py-1.5 rounded transition">Ruínas Conhecidas</a></li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Gameplay</h4>
+                                    <ul class="space-y-1">
+                                        <li><a href="#" class="block text-gray-300 hover:text-pink-400 hover:bg-gray-700/30 px-2 py-1.5 rounded transition">Classes Disponíveis</a></li>
+                                        <li><a href="#" class="block text-gray-300 hover:text-pink-400 hover:bg-gray-700/30 px-2 py-1.5 rounded transition">Atributos e Níveis</a></li>
+                                        <li><a href="#" class="block text-gray-300 hover:text-pink-400 hover:bg-gray-700/30 px-2 py-1.5 rounded transition">Sistema de Inventário</a></li>
+                                    </ul>
+                                </div>
+
+                                <div>
+                                    <h4 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">O Mundo</h4>
+                                    <ul class="space-y-1">
+                                        <li><a href="#" class="block text-gray-300 hover:text-pink-400 hover:bg-gray-700/30 px-2 py-1.5 rounded transition">Áreas e Biomas</a></li>
+                                        <li><a href="#" class="block text-gray-300 hover:text-pink-400 hover:bg-gray-700/30 px-2 py-1.5 rounded transition">Bestiário (Criaturas)</a></li>
+                                        <li><a href="#" class="block text-gray-300 hover:text-pink-400 hover:bg-gray-700/30 px-2 py-1.5 rounded transition">NPCs Importantes</a></li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </aside>
+
+                    <main class="lg:w-3/4">
+                        <div class="bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl p-8 lg:p-10 shadow-xl wiki-content">
+                            
+                            <div class="mb-8">
+                                <div class="flex items-center space-x-2 text-sm text-purple-400 mb-3">
+                                    <span>Lore & História</span>
+                                    <span>&rarr;</span>
+                                    <span class="text-gray-400">A Era dos Eternos</span>
+                                </div>
+                                <h1 class="text-4xl font-bold text-white">A Civilização dos Eternos</h1>
+                            </div>
+
+                            <p>Os <strong>Eternos</strong> formaram a sociedade mais avançada que o mundo já viu. Suas tecnologias beiravam a magia, permitindo-lhes moldar paisagens, dominar elementos e erguer estruturas colossais que desafiavam a gravidade e o tempo.</p>
+                            
+                            <h2>O Legado Esquecido</h2>
+                            <p>Pouco se sabe sobre como eles se pareciam ou o idioma exato que falavam. Hoje, seu legado vive apenas através de ruínas espalhadas por diversos biomas e fragmentos de tecnologia misteriosa que emitem uma fraca aura energética.</p>
+                            
+                            <ul>
+                                <li><strong>Os Pilares Flutuantes:</strong> Estruturas maciças frequentemente encontradas no centro de áreas avançadas.</li>
+                                <li><strong>Núcleos de Energia:</strong> Artefatos que ainda pulsam poder, altamente cobiçados por mercadores e estudiosos.</li>
+                                <li><strong>Guardiões Metálicos:</strong> Autômatos desgastados pelo tempo que ainda patrulham ruínas antigas em estado hostil.</li>
+                            </ul>
+
+                            <h2>O Mistério do Colapso</h2>
+                            <p>Apesar de seu poder incomensurável, a civilização ruiu quase do dia para a noite. Historiadores modernos e exploradores buscam nas masmorras e nos registros antigos o motivo desse fim repentino, desbravando áreas rurais iniciais até as florestas mais densas em busca de respostas.</p>
+                            
+                            <div class="mt-10 p-5 bg-purple-900/20 border border-purple-500/30 rounded-lg">
+                                <h4 class="text-white font-bold mb-2 flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Nota de Desenvolvimento
+                                </h4>
+                                <p class="text-sm text-gray-300 mb-0">Esta é uma página de exemplo da Wiki. Para adicionar novos artigos, basta duplicar este arquivo <code>wiki.html</code>, alterar o conteúdo desta seção central e linkar na barra lateral.</p>
+                            </div>
+
+                        </div>
+                    </main>
+
+                </div>
+            </div>
+
+            <footer class="bg-gray-950 border-t border-gray-800 py-8 mt-auto">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center">
+                    <span class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+                        Chronicles of the Eternal
+                    </span>
+                    <p class="text-gray-500 text-sm mt-2 md:mt-0">&copy; <span id="year"></span>. Wiki Oficial do Projeto.</p>
+                </div>
+            </footer>
+        </div>
+
+        <script>
+            document.getElementById('year').textContent = new Date().getFullYear();
+        </script>
+    </body>
+</html>
