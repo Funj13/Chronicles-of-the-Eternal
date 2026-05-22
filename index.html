@@ -1,14 +1,186 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
-</head>
-<body>
-    
-</body>
+<html lang="pt-BR">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Chronicles of the Eternal - Changelog</title>
+
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+        <style>
+            .font-poppins { font-family: 'Poppins', sans-serif; }
+            html { scroll-behavior: smooth; }
+            
+            /* Estilos para o markdown do GitHub renderizado */
+            .markdown-body ul { list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+            .markdown-body h1, .markdown-body h2, .markdown-body h3 { font-weight: bold; margin-top: 1rem; color: white; }
+            .markdown-body p { margin-bottom: 0.75rem; }
+            .markdown-body code { background-color: rgba(31, 41, 55, 0.8); padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-family: monospace; color: #e5e7eb;}
+        </style>
+    </head>
+    <body class="font-sans antialiased">
+        <div class="font-poppins bg-gray-900 text-gray-100 min-h-screen relative overflow-hidden">
+            
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none fixed"></div>
+            <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+            <nav x-data="{ open: false }" class="absolute w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-700/50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between h-20 items-center">
+                        <div class="hidden md:flex space-x-8 items-center">
+                            <a href="#" class="text-gray-300 hover:text-white transition">Início</a>
+                            <a href="#" class="text-pink-400 font-semibold hover:text-pink-300 transition">Changelog</a>
+                            <a href="#" class="text-gray-300 hover:text-white transition">Wiki</a>
+                        </div>
+
+                        <div class="flex-shrink-0 flex items-center justify-center">
+                            <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 uppercase tracking-widest drop-shadow-lg text-center">
+                                Chronicles of the Eternal
+                            </span>
+                        </div>
+
+                        <div class="hidden md:flex space-x-8 items-center">
+                            <a href="#sobre" class="text-gray-300 hover:text-white transition">Sobre</a>
+                            <a href="https://github.com/Funj13/Chronicles-of-the-Eternal" target="_blank" class="bg-gradient-to-r from-purple-600 to-pink-600 px-5 py-2 rounded-full font-semibold hover:from-purple-500 hover:to-pink-500 shadow-lg shadow-purple-500/30 transition transform hover:-translate-y-0.5">
+                                Ver no GitHub
+                            </a>
+                        </div>
+
+                        <div class="-mr-2 flex items-center md:hidden">
+                            <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition">
+                                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                                    <path :class="{'hidden': open, 'inline-flex': !open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                    <path :class="{'hidden': !open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div :class="{'block': open, 'hidden': !open}" class="md:hidden bg-gray-900 border-b border-gray-700">
+                    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                        <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Início</a>
+                        <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-pink-400 bg-gray-800">Changelog</a>
+                        <a href="#sobre" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Sobre</a>
+                        <a href="https://github.com/Funj13/Chronicles-of-the-Eternal" target="_blank" class="block px-3 py-2 mt-2 text-center rounded-md text-base font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white">Ver no GitHub</a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="pt-32 pb-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center mb-16 space-y-4">
+                    <h1 class="text-5xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 uppercase">Patch Notes</h1>
+                    <p class="text-gray-400 text-lg">Acompanhe o desenvolvimento e as últimas novidades do RPG.</p>
+                    <div class="h-1 w-24 bg-purple-500 rounded-full mx-auto"></div>
+                </div>
+
+                <div class="relative pl-8 sm:pl-0">
+                    <div class="hidden sm:block absolute left-1/2 top-0 bottom-0 w-px bg-gray-700/50 -translate-x-1/2"></div>
+                    
+                    <div id="changelog-container">
+                        <div class="text-center text-gray-400 py-10">
+                            <svg class="animate-spin h-8 w-8 text-purple-500 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                            <p>Buscando os pergaminhos antigos (Releases do GitHub)...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="bg-gray-950 border-t border-gray-800 py-12 mt-10">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0 relative z-10">
+                    <div class="text-center md:text-left">
+                        <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+                            Chronicles of the Eternal
+                        </span>
+                        <p class="text-gray-500 text-sm mt-2">&copy; <span id="year"></span>. Desenvolvido por Caique Pires.</p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+        <script>
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            async function fetchGitHubReleases() {
+                // Aqui apontamos direto para o SEU repositório do jogo
+                const repoURL = 'https://api.github.com/repos/Funj13/Chronicles-of-the-Eternal/releases';
+                const container = document.getElementById('changelog-container');
+
+                try {
+                    const response = await fetch(repoURL);
+                    if (!response.ok) throw new Error('Falha ao buscar dados');
+                    
+                    const releases = await response.json();
+
+                    if (releases.length === 0) {
+                        container.innerHTML = '<p class="text-center text-gray-500 text-lg">Nenhuma novidade publicada ainda. Comece criando uma "Release" no GitHub!</p>';
+                        return;
+                    }
+
+                    let html = '';
+
+                    // Percorre cada release e monta os bloquinhos do HTML
+                    releases.forEach((release, index) => {
+                        // Lógica para alternar os lados da timeline
+                        const isEven = index % 2 !== 0; 
+                        const directionClass = isEven ? 'flex-row-reverse' : '';
+                        const textSideClass = isEven ? 'sm:text-left pl-0 sm:pl-8' : 'sm:text-right pr-0 sm:pr-8';
+                        
+                        // Formata a data para padrão BR
+                        const date = new Date(release.published_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+                        
+                        // Renderiza o corpo do texto de Markdown para HTML
+                        const parsedBody = marked.parse(release.body || 'Sem descrição fornecida.');
+
+                        // Identifica se é pre-release, update, etc (simplificado para estilização)
+                        let tipoBadge = release.prerelease ? 'Beta / Pre-release' : 'Update';
+                        let badgeColor = release.prerelease ? 'text-yellow-300 bg-yellow-900/30 border-yellow-500/30' : 'text-purple-300 bg-purple-900/30 border-purple-500/30';
+                        let dotColor = release.prerelease ? 'bg-yellow-500 shadow-[0_0_15px_rgba(252,211,77,0.8)]' : 'bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.8)]';
+
+                        html += `
+                            <div class="sm:flex items-center justify-between w-full mb-16 relative ${directionClass}">
+                                
+                                <div class="sm:w-5/12 ${textSideClass} mb-4 sm:mb-0">
+                                    <h3 class="text-2xl font-bold text-white">Versão ${release.tag_name}</h3>
+                                    <div class="inline-block px-3 py-1 mt-2 text-xs font-semibold rounded-full uppercase tracking-wider border ${badgeColor}">
+                                        ${tipoBadge}
+                                    </div>
+                                    <p class="text-sm text-gray-500 mt-2">${date}</p>
+                                </div>
+                                
+                                <div class="hidden sm:flex absolute left-1/2 w-4 h-4 rounded-full -translate-x-1/2 border-4 border-gray-900 z-10 ${dotColor}"></div>
+                                
+                                <div class="sm:w-5/12 bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl p-6 shadow-xl hover:-translate-y-1 hover:border-purple-500/50 transition-all duration-300">
+                                    <h4 class="text-xl font-bold text-white mb-4 pb-2 border-b border-gray-700/50">${release.name}</h4>
+                                    
+                                    <div class="text-gray-300 text-sm md:text-base leading-relaxed mb-4 markdown-body">
+                                        ${parsedBody}
+                                    </div>
+                                    
+                                    <a href="${release.html_url}" target="_blank" class="mt-4 inline-block text-sm text-pink-400 hover:text-pink-300 font-semibold underline decoration-transparent hover:decoration-pink-300 transition-all">Ver no GitHub &rarr;</a>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    container.innerHTML = html;
+
+                } catch (error) {
+                    console.error(error);
+                    container.innerHTML = '<p class="text-center text-red-400 text-lg">Erro ao carregar as notas de atualização. Verifique o console.</p>';
+                }
+            }
+
+            // Inicia a função assim que a página carrega
+            fetchGitHubReleases();
+        </script>
+    </body>
 </html>
