@@ -23,7 +23,32 @@
             .markdown-body ul { list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
             .markdown-body h1, .markdown-body h2, .markdown-body h3 { font-weight: bold; margin-top: 1rem; color: white; }
             .markdown-body p { margin-bottom: 0.75rem; }
-            .markdown-body code { background-color: rgba(31, 41, 55, 0.8); padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-family: monospace; color: #e5e7eb;}
+            
+            /* CORREÇÃO DO TRANSBORDAMENTO (OVERFLOW) */
+            /* Força quebra de linha em textos muito longos ou links */
+            .markdown-body { overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; }
+            
+            /* Garante que imagens nunca ultrapassem a largura do card */
+            .markdown-body img { max-width: 100%; height: auto; border-radius: 0.5rem; margin: 1rem 0; }
+            
+            /* Ajusta blocos de código/texto pré-formatado (como o roadmap) */
+            .markdown-body pre { 
+                background-color: rgba(31, 41, 55, 0.5); 
+                padding: 1rem; 
+                border-radius: 0.5rem; 
+                max-width: 100%; 
+                overflow-x: auto; /* Adiciona scroll horizontal se o texto for muito longo */
+                white-space: pre-wrap; /* Força o texto a quebrar a linha em vez de vazar */
+            }
+            
+            .markdown-body code { 
+                background-color: rgba(31, 41, 55, 0.8); 
+                padding: 0.2rem 0.4rem; 
+                border-radius: 0.25rem; 
+                font-family: monospace; 
+                color: #e5e7eb;
+                word-break: break-word;
+            }
         </style>
     </head>
     <body class="font-sans antialiased">
@@ -158,10 +183,10 @@
                                 
                                 <div class="hidden sm:flex absolute left-1/2 w-4 h-4 rounded-full -translate-x-1/2 border-4 border-gray-900 z-10 ${dotColor}"></div>
                                 
-                                <div class="sm:w-5/12 bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl p-6 shadow-xl hover:-translate-y-1 hover:border-purple-500/50 transition-all duration-300">
+                                <div class="sm:w-5/12 bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl p-6 shadow-xl hover:-translate-y-1 hover:border-purple-500/50 transition-all duration-300 overflow-hidden">
                                     <h4 class="text-xl font-bold text-white mb-4 pb-2 border-b border-gray-700/50">${release.name}</h4>
                                     
-                                    <div class="text-gray-300 text-sm md:text-base leading-relaxed mb-4 markdown-body">
+                                    <div class="text-gray-300 text-sm md:text-base leading-relaxed mb-4 markdown-body break-words">
                                         ${parsedBody}
                                     </div>
                                     
