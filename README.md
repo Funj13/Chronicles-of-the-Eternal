@@ -1,6 +1,6 @@
 <div align="center">
 
-![Banner Chronicles of the Eternal](https://github.com/user-attachments/assets/534efad7-96fc-49cc-8d94-0c6d90fb8d1a)
+![Banner Chronicles of the Eternal](https://github.com/user-attachments/assets/b46e3e34-09c6-48f4-b251-88b3d174fa44)
 
 # ⚔️ Chronicles of the Eternal
 ### Um RPG de Ação 3D — Nova Era na Unreal Engine 5
@@ -12,6 +12,7 @@
 <br />
 
 > 📢 **Nota de Atualização:** O projeto passou por uma reformulação completa! Toda a base antiga construída na Godot Engine foi arquivada para dar lugar a uma nova estrutura focada em alta fidelidade e mecânicas avançadas na UE5.
+> Os antigos códigos do repositorio foram migrados para a brainch archive-godot
 
 </div>
 
@@ -69,10 +70,11 @@ Embora as mecânicas estejam sendo refeitas, o design visual e a interface serve
 
 | Interface do Inventário Antigo | Menu Inicial (Legado) |
 | :---: | :---: |
-| <img width="400" alt="Inventário" src="https://github.com/user-attachments/assets/0016b84e-5e62-4aac-ae5d-c37b2ccee8d6" /> | ![Menu](https://github.com/user-attachments/assets/af7a7c7e-9996-4213-b808-ebde30e38820) |
+| <img width="400" alt="Inventário" src="https://github.com/user-attachments/assets/a561fa8c-f867-44a2-a461-ce2ac3dada7d" /> | ![Menu](https://github.com/user-attachments/assets/34ecef9f-b75a-42b1-9e0a-c8364c933107) |
 
 ---
 
 <div align="center">
-    Developed with ❤️ by Funj13
+  
+ by Funj13
 </div>
