@@ -1,0 +1,23 @@
+# Unreal Engine 5 .gitignore
+
+# Visual Studio / IDE
+.vs/
+*.sln
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vsconfig
+UpgradeLog.htm
+
+# Unreal Temporary / Build directories
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+Build/
+
+# Python logs / Scratch
+python_log.txt
+inspect_bp.py
+scratch/
