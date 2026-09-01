@@ -3,6 +3,7 @@
 
 #include "ConsoleManager.h"
 #include "AC_Atributos.h"
+#include "AC_Inventario.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Pawn.h"
 
@@ -87,6 +88,102 @@ FString UConsoleManager::ExecuteConsoleCommand(const FString& RawInput)
 	else if (PrimaryCommand == TEXT("god") || PrimaryCommand == TEXT("godmode"))
 	{
 		return HandleGodCommand(CommandArgs, Atributos);
+	}
+	else if (PrimaryCommand == TEXT("save"))
+	{
+		bool bOk = Atributos->SalvarAtributos();
+		return bOk ? TEXT("[Console] Progresso do jogo salvo com SUCESSO no disco!") : TEXT("[Erro] Falha ao salvar o jogo.");
+	}
+	else if (PrimaryCommand == TEXT("load"))
+	{
+		bool bOk = Atributos->CarregarAtributos();
+		return bOk ? FString::Printf(TEXT("[Console] Progresso CARREGADO! Nível %d, HP %.1f / %.1f, Mana %.1f / %.1f, XP %.1f / %.1f"),
+			Atributos->GetNivel(), Atributos->GetVidaAtual(), Atributos->GetVidaMax(), Atributos->GetManaAtual(), Atributos->GetManaMax(), Atributos->GetXPAtual(), Atributos->GetXPMax()) 
+			: TEXT("[Console] Nenhum arquivo de save encontrado.");
+	}
+	else if (PrimaryCommand == TEXT("damage") || PrimaryCommand == TEXT("dano"))
+	{
+		if (CommandArgs.Num() == 0)
+		{
+			return TEXT("[Erro] Sintaxe incorreta. Use: /damage <quantidade>");
+		}
+		float Dano = FCString::Atof(*CommandArgs[0]);
+		float Restante = Atributos->ReceberDano(Dano);
+		return FString::Printf(TEXT("[Combate] Dano de %.1f aplicado! Vida Restante: %.1f / %.1f"), Dano, Restante, Atributos->GetVidaMax());
+	}
+	else if (PrimaryCommand == TEXT("item"))
+	{
+		if (CommandArgs.Num() == 0)
+		{
+			return TEXT("[Erro] Sintaxe incorreta. Use: /item add <id> [qtd], /item use <slot> ou /item clear.");
+		}
+
+		AActor* OwnerPawn = GetPlayerAttributes() ? GetPlayerAttributes()->GetOwner() : nullptr;
+		UAC_Inventario* Inventario = OwnerPawn ? OwnerPawn->FindComponentByClass<UAC_Inventario>() : nullptr;
+		if (!Inventario)
+		{
+			return TEXT("[Erro] Componente de Inventário (AC_Inventario) não encontrado no personagem.");
+		}
+
+		FString Action = CommandArgs[0].ToLower();
+		if (Action == TEXT("add") && CommandArgs.Num() >= 2)
+		{
+			FItemInventario NovoItem;
+			NovoItem.ItemID = CommandArgs[1];
+			NovoItem.NomeItem = FText::FromString(CommandArgs[1]);
+			NovoItem.Quantidade = CommandArgs.Num() >= 3 ? FCString::Atoi(*CommandArgs[2]) : 1;
+			NovoItem.bConsumivel = CommandArgs[1].Contains(TEXT("pocao")) || CommandArgs[1].Contains(TEXT("potion"));
+			NovoItem.ValorEfeito = NovoItem.bConsumivel ? 50.0f : 0.0f;
+
+			if (NovoItem.bConsumivel)
+			{
+				NovoItem.NomeItem = FText::FromString(TEXT("Poção de Vida"));
+				NovoItem.Descricao = FText::FromString(TEXT("Restaura 50 de Vida ao ser consumida."));
+				NovoItem.Icone = LoadObject<UTexture2D>(nullptr, TEXT("/Game/Chronicles/UI/Icons/T_PocaoVida.T_PocaoVida"));
+			}
+
+			bool bOk = Inventario->AdicionarItem(NovoItem);
+			return bOk ? FString::Printf(TEXT("[Inventário] %dx de '%s' adicionado ao inventário!"), NovoItem.Quantidade, *NovoItem.ItemID)
+					   : TEXT("[Erro] Inventário cheio ou falha ao adicionar item.");
+		}
+		else if (Action == TEXT("use") && CommandArgs.Num() >= 2)
+		{
+			int32 SlotIdx = FCString::Atoi(*CommandArgs[1]);
+			bool bOk = Inventario->UsarItemSlot(SlotIdx);
+			return bOk ? FString::Printf(TEXT("[Inventário] Item do slot %d usado com sucesso!"), SlotIdx) : TEXT("[Erro] Falha ao usar item do slot.");
+		}
+		else if (Action == TEXT("equip") && CommandArgs.Num() >= 3)
+		{
+			int32 HotbarSlot = FCString::Atoi(*CommandArgs[1]) - 1; // converte de 1-6 para 0-5
+			FString ItemID = CommandArgs[2];
+			bool bOk = Inventario->EquiparHotbar(HotbarSlot, ItemID);
+			return bOk ? FString::Printf(TEXT("[Hotbar] Item '%s' equipado na Tecla %d!"), *ItemID, HotbarSlot + 1)
+					   : TEXT("[Erro] Falha ao equipar item na Hotbar.");
+		}
+		else if (Action == TEXT("clear"))
+		{
+			Inventario->LimparInventario();
+			return TEXT("[Inventário] Inventário limpo.");
+		}
+	}
+	else if (PrimaryCommand == TEXT("hotbar"))
+	{
+		if (CommandArgs.Num() == 0)
+		{
+			return TEXT("[Erro] Sintaxe: /hotbar <1-6> [use]");
+		}
+
+		AActor* OwnerPawn = GetPlayerAttributes() ? GetPlayerAttributes()->GetOwner() : nullptr;
+		UAC_Inventario* Inventario = OwnerPawn ? OwnerPawn->FindComponentByClass<UAC_Inventario>() : nullptr;
+		if (!Inventario)
+		{
+			return TEXT("[Erro] Componente de Inventário (AC_Inventario) não encontrado.");
+		}
+
+		int32 HotbarSlot = FCString::Atoi(*CommandArgs[0]) - 1;
+		bool bOk = Inventario->UsarHotbar(HotbarSlot);
+		return bOk ? FString::Printf(TEXT("[Hotbar] Atalho %d usado com sucesso!"), HotbarSlot + 1)
+				   : FString::Printf(TEXT("[Erro] Nenhum item utilizável no atalho %d."), HotbarSlot + 1);
 	}
 
 	// Comando desconhecido
@@ -292,6 +389,8 @@ FString UConsoleManager::HandleHelpCommand()
 				"  /mana <add|set> <valor> - Adiciona ou define o valor da Mana do herói.\n"
 				"  /level <valor>          - Altera o nível do herói (Limite: Nível 99).\n"
 				"  /god                    - Alterna o modo imortalidade (God Mode).\n"
+				"  /save                   - Salva o progresso e atributos do herói no disco.\n"
+				"  /load                   - Carrega o progresso salvo do herói do disco.\n"
 				"  /help                   - Exibe este menu de documentação de comandos.\n"
 				"===========================================================");
 }

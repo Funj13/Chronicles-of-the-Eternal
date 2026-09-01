@@ -6,6 +6,11 @@
 #include "Components/ActorComponent.h"
 #include "AC_Atributos.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnVidaAlterada, float, NovaVida, float, VidaMax);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnManaAlterada, float, NovaMana, float, ManaMax);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnLevelUp, int32, NovoNivel, float, NovoXPMax);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPersonagemMorreu);
+
 /**
  * Componente de gerenciamento de atributos (Vida, Mana, Nível e XP) para Chronicles of the Eternal.
  */
@@ -50,7 +55,24 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Atributos|Debug")
 	bool bGodMode;
 
+	/** Estado de Vida/Morte (Passo 6) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Atributos|Combate")
+	bool bEstaMorto;
+
 public:
+	/** Eventos para Atualização de UI / HUD */
+	UPROPERTY(BlueprintAssignable, Category = "Atributos|Eventos")
+	FOnVidaAlterada OnVidaAlterada;
+
+	UPROPERTY(BlueprintAssignable, Category = "Atributos|Eventos")
+	FOnManaAlterada OnManaAlterada;
+
+	UPROPERTY(BlueprintAssignable, Category = "Atributos|Eventos")
+	FOnLevelUp OnLevelUp;
+
+	UPROPERTY(BlueprintAssignable, Category = "Atributos|Eventos")
+	FOnPersonagemMorreu OnPersonagemMorreu;
+
 	/** Getters para os Atributos */
 	UFUNCTION(BlueprintCallable, Category = "Atributos|Getters")
 	float GetVidaAtual() const { return VidaAtual; }
@@ -76,7 +98,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Atributos|Getters")
 	bool IsGodModeActive() const { return bGodMode; }
 
+	UFUNCTION(BlueprintCallable, Category = "Atributos|Getters")
+	bool IsMorto() const { return bEstaMorto; }
+
 	/** Métodos de Modificação de Atributos */
+
+	// Aplica dano ao personagem (respeitando God Mode). Retorna a vida restante.
+	UFUNCTION(BlueprintCallable, Category = "Atributos|Combate")
+	float ReceberDano(float QuantidadeDano, AActor* Atacante = nullptr);
 
 	// Cura o personagem. Se Valor <= 0, cura totalmente.
 	UFUNCTION(BlueprintCallable, Category = "Atributos|Ações")
@@ -113,6 +142,16 @@ public:
 	// Alterna o estado do modo God (Imortal)
 	UFUNCTION(BlueprintCallable, Category = "Atributos|Ações")
 	void ToggleGodMode();
+
+	/** Métodos de Persistência (Save / Load) */
+
+	// Salva o estado atual dos atributos no disco no slot informado
+	UFUNCTION(BlueprintCallable, Category = "Atributos|Save")
+	bool SalvarAtributos(const FString& SlotName = TEXT("ChroniclesSaveSlot"));
+
+	// Carrega o estado dos atributos do disco do slot informado
+	UFUNCTION(BlueprintCallable, Category = "Atributos|Save")
+	bool CarregarAtributos(const FString& SlotName = TEXT("ChroniclesSaveSlot"));
 
 private:
 	// Função interna para processar o ganho de níveis
