@@ -128,22 +128,17 @@ FString UConsoleManager::ExecuteConsoleCommand(const FString& RawInput)
 		FString Action = CommandArgs[0].ToLower();
 		if (Action == TEXT("add") && CommandArgs.Num() >= 2)
 		{
-			FItemInventario NovoItem;
-			NovoItem.ItemID = CommandArgs[1];
-			NovoItem.NomeItem = FText::FromString(CommandArgs[1]);
-			NovoItem.Quantidade = CommandArgs.Num() >= 3 ? FCString::Atoi(*CommandArgs[2]) : 1;
-			NovoItem.bConsumivel = CommandArgs[1].Contains(TEXT("pocao")) || CommandArgs[1].Contains(TEXT("potion"));
-			NovoItem.ValorEfeito = NovoItem.bConsumivel ? 50.0f : 0.0f;
+			FName ItemTargetName = FName(*CommandArgs[1]);
+			int32 Qtd = CommandArgs.Num() >= 3 ? FCString::Atoi(*CommandArgs[2]) : 1;
 
-			if (NovoItem.bConsumivel)
+			FItemInventario ItemEncontrado;
+			if (!Inventario->BuscarItemNaTabela(ItemTargetName, ItemEncontrado))
 			{
-				NovoItem.NomeItem = FText::FromString(TEXT("Poção de Vida"));
-				NovoItem.Descricao = FText::FromString(TEXT("Restaura 50 de Vida ao ser consumida."));
-				NovoItem.Icone = LoadObject<UTexture2D>(nullptr, TEXT("/Game/Chronicles/UI/Icons/T_PocaoVida.T_PocaoVida"));
+				return FString::Printf(TEXT("[Erro] O item '%s' não existe na tabela DT_Items!"), *CommandArgs[1]);
 			}
 
-			bool bOk = Inventario->AdicionarItem(NovoItem);
-			return bOk ? FString::Printf(TEXT("[Inventário] %dx de '%s' adicionado ao inventário!"), NovoItem.Quantidade, *NovoItem.ItemID)
+			bool bOk = Inventario->AdicionarItemPorID(ItemTargetName, Qtd);
+			return bOk ? FString::Printf(TEXT("[Inventário] %dx de '%s' adicionado ao inventário!"), Qtd, *ItemEncontrado.NomeItem.ToString())
 					   : TEXT("[Erro] Inventário cheio ou falha ao adicionar item.");
 		}
 		else if (Action == TEXT("use") && CommandArgs.Num() >= 2)

@@ -81,10 +81,22 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventário|Hotbar")
 	TArray<FString> HotbarItemIDs;
 
+	/** Referência à Tabela de Dados de Itens (DT_Items) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventário|DataTable")
+	UDataTable* TabelaItens;
+
 public:
 	/** Evento disparado para a UI sempre que o inventário ou hotbar mudar */
 	UPROPERTY(BlueprintAssignable, Category = "Inventário|Eventos")
 	FOnInventarioAtualizado OnInventarioAtualizado;
+
+	/** Adiciona um item ao inventário buscando diretamente na DT_Items por RowName ou ItemID. */
+	UFUNCTION(BlueprintCallable, Category = "Inventário|Ações")
+	bool AdicionarItemPorID(FName ItemIDOuRowName, int32 Quantidade = 1);
+
+	/** Busca um item na DataTable por RowName ou ItemID */
+	UFUNCTION(BlueprintCallable, Category = "Inventário|Getters")
+	bool BuscarItemNaTabela(FName ItemIDOuRowName, FItemInventario& OutItem) const;
 
 	/** Adiciona um item ao inventário. Retorna true se adicionou completamente. */
 	UFUNCTION(BlueprintCallable, Category = "Inventário|Ações")

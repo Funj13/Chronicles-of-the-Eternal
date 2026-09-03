@@ -9,6 +9,7 @@ UAC_Inventario::UAC_Inventario()
 	PrimaryComponentTick.bCanEverTick = false;
 	CapacidadeMaxima = 20;
 	HotbarItemIDs.Init(TEXT(""), 6);
+	TabelaItens = nullptr;
 }
 
 void UAC_Inventario::BeginPlay()
@@ -18,6 +19,78 @@ void UAC_Inventario::BeginPlay()
 	{
 		HotbarItemIDs.Init(TEXT(""), 6);
 	}
+
+	if (!TabelaItens)
+	{
+		TabelaItens = LoadObject<UDataTable>(nullptr, TEXT("/Game/Chronicles/Date/DT_Items.DT_Items"));
+		if (!TabelaItens)
+		{
+			TabelaItens = LoadObject<UDataTable>(nullptr, TEXT("/Game/Chronicles/Data/DT_Items.DT_Items"));
+		}
+	}
+}
+
+bool UAC_Inventario::BuscarItemNaTabela(FName ItemIDOuRowName, FItemInventario& OutItem) const
+{
+	UDataTable* Table = TabelaItens;
+	if (!Table)
+	{
+		Table = LoadObject<UDataTable>(nullptr, TEXT("/Game/Chronicles/Date/DT_Items.DT_Items"));
+		if (!Table)
+		{
+			Table = LoadObject<UDataTable>(nullptr, TEXT("/Game/Chronicles/Data/DT_Items.DT_Items"));
+		}
+	}
+
+	if (!Table)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[Inventário] Tabela de Itens (DT_Items) não encontrada!"));
+		return false;
+	}
+
+	// 1. Tenta buscar direto pelo RowName (ex: pocao_vida, pocao_mana, etc.)
+	FItemInventario* Row = Table->FindRow<FItemInventario>(ItemIDOuRowName, TEXT("BuscarItemNaTabela"));
+	if (Row)
+	{
+		OutItem = *Row;
+		if (OutItem.ItemID.IsEmpty() || OutItem.ItemID == TEXT("none"))
+		{
+			OutItem.ItemID = ItemIDOuRowName.ToString();
+		}
+		return true;
+	}
+
+	// 2. Tenta buscar pela coluna ItemID do GDD (ex: itm_potion_hp_small, itm_ether_mana, mat_energy_cube)
+	FString SearchStr = ItemIDOuRowName.ToString();
+	for (const auto& It : Table->GetRowMap())
+	{
+		const FItemInventario* ItemRow = reinterpret_cast<const FItemInventario*>(It.Value);
+		if (ItemRow && (ItemRow->ItemID.Equals(SearchStr, ESearchCase::IgnoreCase) || It.Key.ToString().Equals(SearchStr, ESearchCase::IgnoreCase)))
+		{
+			OutItem = *ItemRow;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool UAC_Inventario::AdicionarItemPorID(FName ItemIDOuRowName, int32 Quantidade)
+{
+	if (Quantidade <= 0)
+	{
+		return false;
+	}
+
+	FItemInventario ItemEncontrado;
+	if (!BuscarItemNaTabela(ItemIDOuRowName, ItemEncontrado))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[Inventário] O item '%s' não existe na DataTable DT_Items!"), *ItemIDOuRowName.ToString());
+		return false;
+	}
+
+	ItemEncontrado.Quantidade = Quantidade;
+	return AdicionarItem(ItemEncontrado);
 }
 
 bool UAC_Inventario::EquiparHotbar(int32 HotbarIndex, FString ItemID)
