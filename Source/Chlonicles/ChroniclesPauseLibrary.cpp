@@ -125,10 +125,12 @@ void UChroniclesPauseLibrary::AlternarInventario(UObject* WorldContextObject, AP
 			}
 
 			FInputModeGameAndUI InputMode;
+			InputMode.SetWidgetToFocus(GActiveInventoryWidget->TakeWidget());
 			InputMode.SetHideCursorDuringCapture(false);
 			InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 			PlayerController->SetInputMode(InputMode);
 			PlayerController->bShowMouseCursor = true;
+			PlayerController->SetIgnoreLookInput(true);
 			UE_LOG(LogTemp, Log, TEXT("[Inventário] Inventário ABERTO."));
 		}
 	}

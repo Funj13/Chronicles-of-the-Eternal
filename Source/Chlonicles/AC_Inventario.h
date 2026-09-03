@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Engine/Texture2D.h"
+#include "Engine/DataTable.h"
 #include "AC_Inventario.generated.h"
 
 /**
- * Estrutura que representa um Item do Inventário em C++
+ * Estrutura que representa um Item do Inventário e Linha da DataTable em C++
  */
 USTRUCT(BlueprintType)
-struct FItemInventario
+struct FItemInventario : public FTableRowBase
 {
 	GENERATED_BODY()
 
