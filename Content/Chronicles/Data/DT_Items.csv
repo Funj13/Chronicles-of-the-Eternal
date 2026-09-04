@@ -1,0 +1,15 @@
+---,ItemID,NomeItem,Descricao,Quantidade,QuantidadeMaximaStack,Icone,bConsumivel,ValorEfeito
+pocao_vida_pequena,itm_potion_hp_small,"Poção Pequena","Uma poção pequena para curar raladuras. Restaura 20 de vida",0,99,"/Game/Chronicles/UI/Icons/T_pocao_small.T_pocao_small",True,20.0
+pocao_vida_media,itm_potion_hp_mid,"Poção Média","Recupera vida levemente. Gosto amargo. Um pouco maior que a poção pequena",0,99,"/Game/Chronicles/UI/Icons/T_pocao_small.T_pocao_small",True,35.0
+cantil_stamina,itm_ether_stamina,"Cantil","Nada melhor para descansar que um pouco de água.",0,99,"/Game/Chronicles/UI/Icons/T_pocao_mana_Small.T_pocao_mana_Small",True,100.0
+pocao_vida,itm_potion_hp_big,"Poção Grande","Recupera vida levemente. Gosto amargo.",0,99,"/Game/Chronicles/UI/Icons/T_PocaoVida.T_PocaoVida",True,50.0
+pocao_mana,itm_ether_mana,"Éter Mana","Recupera mana. Brilha no escuro.",0,99,"/Game/Chronicles/UI/Icons/T_pocao_mana_big.T_pocao_mana_big",True,30.0
+minerio_ferro,mat_iron_ore,"Minério de Ferro","Usado para forjar armas básicas.",0,99,"/Game/Chronicles/UI/Icons/T_cubo.T_cubo",False,0.0
+minerio_cobre,mat_copper_ore,"Minério de Cobre","Usado para forjar armas básicas.",0,99,"/Game/Chronicles/UI/Icons/T_cubo.T_cubo",False,0.0
+cubo_energia,mat_energy_cube,"Cubo de Energia","Um item desconhecido...",0,1,"/Game/Chronicles/UI/Icons/T_cubo.T_cubo",False,0.0
+injetor_vida,itm_heal_injector,"Injetor de Vida","Seringa de metal estilo steampunk/militar.",0,1,"/Game/Chronicles/UI/Icons/T_pocao_small.T_pocao_small",True,50.0
+celula_mana,itm_battery_cell,"Célula de Mana","Bateria retangular brilhando azul neon.",0,1,"/Game/Chronicles/UI/Icons/T_pocao_mana_Small.T_pocao_mana_Small",True,50.0
+sucata,mat_scrap_metal,"Sucata","Engrenagem quebrada ou chapa amassada.",0,99,"/Game/Chronicles/UI/Icons/T_cubo.T_cubo",False,0.0
+chip_eterno,mat_tech_chip,"Chip Eterno","Placa de circuito brilhante e limpa.",0,1,"/Game/Chronicles/UI/Icons/T_cubo.T_cubo",False,0.0
+valvula_chave,key_valve_wheel,"Válvula (Chave)","Roda de registro de água (abre portas humanas).",0,1,"/Game/Chronicles/UI/Icons/T_cubo.T_cubo",False,0.0
+cartao_acesso,key_access_card,"Cartão Acesso","Cartão magnético de vidro/plástico (abre dungeons).",0,1,"/Game/Chronicles/UI/Icons/T_cubo.T_cubo",False,0.0

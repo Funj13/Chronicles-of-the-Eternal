@@ -81,6 +81,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventário|Hotbar")
 	TArray<FString> HotbarItemIDs;
 
+	/** Itens físicos equipados nos slots da Hotbar (0 a 5 -> Teclas 1 a 6) */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventário|Hotbar")
+	TArray<FItemInventario> HotbarItens;
+
 	/** Referência à Tabela de Dados de Itens (DT_Items) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventário|DataTable")
 	UDataTable* TabelaItens;
@@ -114,6 +118,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Inventário|Ações")
 	bool TrocarSlotsInventario(int32 DeIndex, int32 ParaIndex);
 
+	/** Move ou troca um item do inventário com um slot da Hotbar (estilo Minecraft) */
+	UFUNCTION(BlueprintCallable, Category = "Inventário|Hotbar")
+	bool MoverInventarioParaHotbar(int32 InvSlot, int32 HotbarSlot);
+
+	/** Move ou troca um item da Hotbar com um slot do inventário (estilo Minecraft) */
+	UFUNCTION(BlueprintCallable, Category = "Inventário|Hotbar")
+	bool MoverHotbarParaInventario(int32 HotbarSlot, int32 InvSlot);
+
+	/** Troca dois slots dentro da própria Hotbar */
+	UFUNCTION(BlueprintCallable, Category = "Inventário|Hotbar")
+	bool TrocarSlotsHotbar(int32 DeHotbarIndex, int32 ParaHotbarIndex);
+
 	/** Equipar ItemID no slot da Hotbar (0 a 5) */
 	UFUNCTION(BlueprintCallable, Category = "Inventário|Hotbar")
 	bool EquiparHotbar(int32 HotbarIndex, FString ItemID);
@@ -130,9 +146,25 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Inventário|Hotbar")
 	TArray<FString> GetHotbarItemIDs() const { return HotbarItemIDs; }
 
-	/** Obtém a lista completa de itens */
-	UFUNCTION(BlueprintCallable, Category = "Inventário|Getters")
-	TArray<FItemInventario> GetItens() const { return Itens; }
+	/** Obtém a lista de itens físicos da Hotbar */
+	UFUNCTION(BlueprintCallable, Category = "Inventário|Hotbar")
+	TArray<FItemInventario> GetHotbarItens() const { return HotbarItens; }
+
+	/** Define os itens físicos da Hotbar (usado para carregar SaveGame) */
+	UFUNCTION(BlueprintCallable, Category = "Inventário|Hotbar")
+	void SetHotbarItens(const TArray<FItemInventario>& NovosHotbarItens) { HotbarItens = NovosHotbarItens; OnInventarioAtualizado.Broadcast(); }
+
+	/** Garante que Itens e Hotbar possuem o número exato de slots pré-alocados */
+	UFUNCTION(BlueprintCallable, Category = "Inventário|Ações")
+	void GarantirTamanhoSlots();
+
+	/** Obtém a lista completa de itens com tamanho garantido de 28 slots */
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventário|Getters")
+	TArray<FItemInventario> GetItens() const;
+
+	/** Define a lista completa de itens (usado para carregar SaveGame) */
+	UFUNCTION(BlueprintCallable, Category = "Inventário|Ações")
+	void SetItens(const TArray<FItemInventario>& NovosItens) { Itens = NovosItens; GarantirTamanhoSlots(); OnInventarioAtualizado.Broadcast(); }
 
 	/** Obtém a capacidade máxima */
 	UFUNCTION(BlueprintCallable, Category = "Inventário|Getters")

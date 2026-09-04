@@ -269,6 +269,7 @@ bool UAC_Atributos::SalvarAtributos(const FString& SlotName)
 		if (Inventario)
 		{
 			SaveInstance->SavedItens = Inventario->GetItens();
+			SaveInstance->SavedHotbarItens = Inventario->GetHotbarItens();
 		}
 	}
 
@@ -331,14 +332,18 @@ bool UAC_Atributos::CarregarAtributos(const FString& SlotName)
 		}
 
 		UAC_Inventario* Inventario = OwnerActor->FindComponentByClass<UAC_Inventario>();
-		if (Inventario && SaveInstance->SavedItens.Num() > 0)
+		if (Inventario)
 		{
-			Inventario->LimparInventario();
-			for (const FItemInventario& Item : SaveInstance->SavedItens)
+			if (SaveInstance->SavedItens.Num() > 0)
 			{
-				Inventario->AdicionarItem(Item);
+				Inventario->SetItens(SaveInstance->SavedItens);
+				UE_LOG(LogTemp, Warning, TEXT("[SaveGame] Inventário restaurado com %d slots."), SaveInstance->SavedItens.Num());
 			}
-			UE_LOG(LogTemp, Warning, TEXT("[SaveGame] Inventário restaurado com %d slots."), SaveInstance->SavedItens.Num());
+			if (SaveInstance->SavedHotbarItens.Num() > 0)
+			{
+				Inventario->SetHotbarItens(SaveInstance->SavedHotbarItens);
+				UE_LOG(LogTemp, Warning, TEXT("[SaveGame] Hotbar restaurada com %d slots."), SaveInstance->SavedHotbarItens.Num());
+			}
 		}
 	}
 

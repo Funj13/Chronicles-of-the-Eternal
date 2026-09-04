@@ -65,4 +65,8 @@ public:
 	/** Inventário Salvo (Passo 5) */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveGame|Inventário")
 	TArray<FItemInventario> SavedItens;
+
+	/** Hotbar Salva (Passo 5) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SaveGame|Inventário")
+	TArray<FItemInventario> SavedHotbarItens;
 };
