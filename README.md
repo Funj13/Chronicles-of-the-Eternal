@@ -41,8 +41,8 @@ Para quem acompanhou o início do projeto, a versão feita na Godot 4 alcançou 
 
 O projeto foi reiniciado do zero na UE5. Os objetivos atuais estão focados em reconstruir o *Core* do jogo:
 
-- [ ] Configuração do Enhanced Input System (Movimentação fluida em 3ª pessoa)
-- [ ] Configuração do esqueleto e retargeting de animações para o estilo Anime
+- [ X ] Configuração do Enhanced Input System (Movimentação fluida em 3ª pessoa)
+- [ X ] Configuração do esqueleto e retargeting de animações para o estilo Anime
 - [ ] Implementação da base do sistema de combate via Blueprints/C++
 - [ ] Reestruturação do Sistema de Inventário Avançado
 - [ ] Criação dos primeiros protótipos de mapa e ambientação 3D
