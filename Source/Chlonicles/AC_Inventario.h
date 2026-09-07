@@ -39,6 +39,12 @@ struct FItemInventario : public FTableRowBase
 	UStaticMesh* Mesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
+	FName Socket;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
+	FTransform Transform;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
 	bool bConsumivel;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
@@ -52,6 +58,8 @@ struct FItemInventario : public FTableRowBase
 		, QuantidadeMaximaStack(99)
 		, Icone(nullptr)
 		, Mesh(nullptr)
+		, Socket(FName(TEXT("hand_rSocket")))
+		, Transform(FTransform::Identity)
 		, bConsumivel(false)
 		, ValorEfeito(0.0f)
 	{}
