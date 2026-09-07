@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Engine/Texture2D.h"
+#include "Engine/StaticMesh.h"
 #include "Engine/DataTable.h"
 #include "AC_Inventario.generated.h"
 
@@ -35,6 +36,9 @@ struct FItemInventario : public FTableRowBase
 	UTexture2D* Icone;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
+	UStaticMesh* Mesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
 	bool bConsumivel;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
@@ -47,6 +51,7 @@ struct FItemInventario : public FTableRowBase
 		, Quantidade(0)
 		, QuantidadeMaximaStack(99)
 		, Icone(nullptr)
+		, Mesh(nullptr)
 		, bConsumivel(false)
 		, ValorEfeito(0.0f)
 	{}
