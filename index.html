@@ -1,74 +1,61 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Chronicles of the Eternal - Changelog</title>
+        <title>Chronicles of the Eternal - Action RPG</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
         <script src="https://cdn.tailwindcss.com"></script>
-        
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-        
-        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
         <style>
             .font-poppins { font-family: 'Poppins', sans-serif; }
             html { scroll-behavior: smooth; }
             
-            /* Estilos para o markdown do GitHub renderizado */
-            .markdown-body ul { list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
-            .markdown-body h1, .markdown-body h2, .markdown-body h3 { font-weight: bold; margin-top: 1rem; color: white; }
-            .markdown-body p { margin-bottom: 0.75rem; }
-            
-            /* CORREÇÃO DO TRANSBORDAMENTO (OVERFLOW) */
-            /* Força quebra de linha em textos muito longos ou links */
-            .markdown-body { overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; }
-            
-            /* Garante que imagens nunca ultrapassem a largura do card */
-            .markdown-body img { max-width: 100%; height: auto; border-radius: 0.5rem; margin: 1rem 0; }
-            
-            /* Ajusta blocos de código/texto pré-formatado (como o roadmap) */
-            .markdown-body pre { 
-                background-color: rgba(31, 41, 55, 0.5); 
-                padding: 1rem; 
-                border-radius: 0.5rem; 
-                max-width: 100%; 
-                overflow-x: auto; /* Adiciona scroll horizontal se o texto for muito longo */
-                white-space: pre-wrap; /* Força o texto a quebrar a linha em vez de vazar */
+            .glow-card {
+                position: relative;
             }
-            
-            .markdown-body code { 
-                background-color: rgba(31, 41, 55, 0.8); 
-                padding: 0.2rem 0.4rem; 
-                border-radius: 0.25rem; 
-                font-family: monospace; 
-                color: #e5e7eb;
-                word-break: break-word;
+            .glow-card::before {
+                content: '';
+                position: absolute;
+                inset: -1px;
+                border-radius: 1rem;
+                padding: 1px;
+                background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(236, 72, 153, 0.1), transparent);
+                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+                -webkit-mask-composite: xor;
+                mask-composite: exclude;
+                pointer-events: none;
             }
         </style>
     </head>
     <body class="font-sans antialiased">
-        <div class="font-poppins bg-gray-900 text-gray-100 min-h-screen relative overflow-hidden">
+        <div class="font-poppins bg-gray-900 text-gray-100 min-h-screen relative overflow-hidden flex flex-col">
             
-            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 pointer-events-none fixed"></div>
-            <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none"></div>
+            <!-- Fundo Estrelado e Gradientes de Luz -->
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-25 pointer-events-none fixed"></div>
+            <div class="fixed top-[-100px] left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-purple-900/25 rounded-full blur-[140px] pointer-events-none"></div>
+            <div class="fixed bottom-0 right-0 w-[500px] h-[400px] bg-pink-900/15 rounded-full blur-[130px] pointer-events-none"></div>
 
+            <!-- Navbar -->
             <nav x-data="{ open: false }" class="absolute w-full z-50 bg-gray-900/80 backdrop-blur-md border-b border-gray-700/50">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-20 items-center">
                         <div class="hidden md:flex space-x-8 items-center">
-                            <a href="#" class="text-pink-400 font-semibold hover:text-pink-300 transition">Changelog</a>
+                            <a href="index.html" class="text-pink-400 font-semibold hover:text-pink-300 transition">Início</a>
+                            <a href="changelog.html" class="text-gray-300 hover:text-white transition">Changelog</a>
                             <a href="wiki.html" class="text-gray-300 hover:text-white transition">Wiki</a>
                         </div>
 
                         <div class="flex-shrink-0 flex items-center justify-center">
-                            <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 uppercase tracking-widest drop-shadow-lg text-center">
+                            <a href="index.html" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 uppercase tracking-widest drop-shadow-lg text-center hover:opacity-90 transition">
                                 Chronicles of the Eternal
-                            </span>
+                            </a>
                         </div>
 
                         <div class="hidden md:flex space-x-8 items-center">
@@ -89,122 +76,311 @@
                     </div>
                 </div>
 
+                <!-- Menu Mobile -->
                 <div :class="{'block': open, 'hidden': !open}" class="md:hidden bg-gray-900 border-b border-gray-700">
                     <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                        <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Início</a>
-                        <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-pink-400 bg-gray-800">Changelog</a>
-                        <a href="#sobre" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Sobre</a>
+                        <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-pink-400 bg-gray-800">Início</a>
+                        <a href="changelog.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Changelog</a>
+                        <a href="wiki.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Wiki</a>
+                        <a href="sobre.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Sobre</a>
                         <a href="https://github.com/Funj13/Chronicles-of-the-Eternal" target="_blank" class="block px-3 py-2 mt-2 text-center rounded-md text-base font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white">Ver no GitHub</a>
                     </div>
                 </div>
             </nav>
 
-            <div class="pt-32 pb-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div class="text-center mb-16 space-y-4">
-                    <h1 class="text-5xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500 uppercase">Patch Notes</h1>
-                    <p class="text-gray-400 text-lg">Acompanhe o desenvolvimento e as últimas novidades do RPG.</p>
-                    <div class="h-1 w-24 bg-purple-500 rounded-full mx-auto"></div>
+            <!-- HERO SECTION -->
+            <header class="pt-36 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                
+                <!-- Status Badges -->
+                <div class="inline-flex items-center space-x-2 bg-gray-800/80 border border-purple-500/40 px-4 py-1.5 rounded-full text-xs font-semibold mb-8 backdrop-blur-md shadow-lg shadow-purple-900/20">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                    <span class="text-purple-300">Em Desenvolvimento Ativo</span>
+                    <span class="text-gray-500">|</span>
+                    <span class="text-gray-300">Unreal Engine 5.4</span>
+                    <span class="text-gray-500">|</span>
+                    <span class="text-pink-400 font-medium">Action RPG</span>
                 </div>
 
-                <div class="relative pl-8 sm:pl-0">
-                    <div class="hidden sm:block absolute left-1/2 top-0 bottom-0 w-px bg-gray-700/50 -translate-x-1/2"></div>
-                    
-                    <div id="changelog-container">
-                        <div class="text-center text-gray-400 py-10">
-                            <svg class="animate-spin h-8 w-8 text-purple-500 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                            <p>Buscando os pergaminhos antigos (Releases do GitHub)...</p>
+                <!-- Main Headline -->
+                <h1 class="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight uppercase mb-6 leading-tight">
+                    <span class="block text-white">Chronicles of the</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-pink-500 drop-shadow-[0_0_35px_rgba(236,72,153,0.35)]">
+                        Eternal
+                    </span>
+                </h1>
+
+                <p class="max-w-3xl mx-auto text-lg sm:text-xl text-gray-300 leading-relaxed mb-10 font-normal">
+                    Desvende ruínas colossais, domine tecnologias ancestrais incompreendidas e enfrente perigos esquecidos em um Action RPG imersivo moldado pelo legado da civilização dos Eternos.
+                </p>
+
+                <!-- Call To Actions -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                    <a href="changelog.html" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-full font-bold text-base bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white shadow-xl shadow-purple-600/30 transform hover:-translate-y-0.5 transition duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                        Ver Patch Notes & Releases
+                    </a>
+                    <a href="wiki.html" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 rounded-full font-bold text-base bg-gray-800/80 hover:bg-gray-700/80 border border-gray-600/60 hover:border-pink-500/50 text-gray-200 hover:text-white backdrop-blur-md transition duration-200">
+                        <svg class="w-5 h-5 mr-2 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        Explorar a Wiki
+                    </a>
+                    <a href="https://github.com/Funj13/Chronicles-of-the-Eternal" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-full font-semibold text-base bg-gray-900/60 hover:bg-gray-800 border border-gray-700 text-gray-300 hover:text-white transition duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path></svg>
+                        GitHub Devlog
+                    </a>
+                </div>
+
+                <!-- Showcase Preview Hero Card -->
+                <div class="relative max-w-5xl mx-auto rounded-2xl p-2 bg-gradient-to-b from-purple-500/40 via-pink-500/20 to-transparent shadow-2xl shadow-purple-950/60">
+                    <div class="relative rounded-xl overflow-hidden bg-gray-950/80 border border-gray-700/60">
+                        <img 
+                            src="https://raw.githubusercontent.com/Funj13/Chronicles-of-the-Eternal/main/Documentation/Releases/ue5-v3.8-alpha/01_ue5_dynamic_inventory_gameplay.png" 
+                            alt="Chronicles of the Eternal - Gameplay na Unreal Engine 5" 
+                            class="w-full h-auto object-cover transform hover:scale-[1.01] transition-transform duration-500"
+                        />
+                        <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-gray-950 via-gray-950/80 to-transparent p-6 text-left flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+                            <div>
+                                <span class="text-xs uppercase tracking-widest text-pink-400 font-semibold">Captura Direta da UE5</span>
+                                <h3 class="text-xl font-bold text-white">Inventário Dinâmico em Tempo Real</h3>
+                                <p class="text-sm text-gray-400">Grid reativo com Wrap Box, slots gerados sob demanda e HUD industrial integrado.</p>
+                            </div>
+                            <a href="changelog.html" class="inline-flex items-center text-sm font-semibold text-purple-300 hover:text-pink-300 transition">
+                                Ver notas desta versão &rarr;
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <footer class="bg-gray-950 border-t border-gray-800 py-12 mt-10">
+            </header>
+
+            <!-- DESTAQUE ÚLTIMA RELEASE CALLOUT -->
+            <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-24 relative z-10 w-full">
+                <div class="bg-gray-800/40 backdrop-blur-md border border-purple-500/30 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl hover:border-purple-500/60 transition-all duration-300">
+                    <div class="space-y-2 text-center md:text-left">
+                        <div class="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-pink-400">
+                            <span class="w-2 h-2 rounded-full bg-pink-500"></span>
+                            <span>Último Marco Publicado</span>
+                            <span class="px-2 py-0.5 rounded bg-purple-900/60 border border-purple-500/40 text-purple-300 font-mono">ue5-v3.8-alpha</span>
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-white">
+                            Remodelagem Dinâmica do Inventário & Identidade Visual
+                        </h2>
+                        <p class="text-gray-400 text-sm max-w-2xl leading-relaxed">
+                            Substituição da grade estática pelo Wrap Box com filtragem de itens vazios, nova estética inspirada no HUD oficial e pesquisa do sistema de combate melee.
+                        </p>
+                    </div>
+                    <a href="changelog.html" class="flex-shrink-0 inline-flex items-center px-6 py-3 rounded-xl bg-purple-600/80 hover:bg-purple-600 text-white font-semibold text-sm transition shadow-lg shadow-purple-600/20">
+                        Ler Patch Notes Completo &rarr;
+                    </a>
+                </div>
+            </section>
+
+            <!-- PILARES DO JOGO (FEATURES) -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-28 relative z-10 w-full">
+                <div class="text-center mb-16 space-y-4">
+                    <h2 class="text-xs uppercase tracking-widest font-bold text-pink-400">Mecânicas & Sistemas</h2>
+                    <h3 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">
+                        Construído para Imersão e Ação
+                    </h3>
+                    <div class="h-1 w-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full mx-auto"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    
+                    <!-- Card 1 -->
+                    <div class="bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl p-6 hover:-translate-y-1.5 hover:border-purple-500/50 transition-all duration-300 shadow-xl flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-purple-900/40 border border-purple-500/40 flex items-center justify-center text-purple-300 mb-5 text-2xl">
+                                ⚔️
+                            </div>
+                            <h4 class="text-xl font-bold text-white mb-2">Combate Dinâmico</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                Ação em terceira pessoa com mecânicas de ataque, empunhadura e guarda de armas, animações responsivas e detecção precisa de impacto.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-gray-700/40 text-xs text-purple-400 font-semibold">
+                            Enhanced Input & Animação UE5
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl p-6 hover:-translate-y-1.5 hover:border-pink-500/50 transition-all duration-300 shadow-xl flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-pink-900/40 border border-pink-500/40 flex items-center justify-center text-pink-300 mb-5 text-2xl">
+                                🎒
+                            </div>
+                            <h4 class="text-xl font-bold text-white mb-2">Inventário Reativo</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                Arquitetura moderna com Wrap Box fluido, eliminação de slots vazios desnecessários, hotbar de acesso rápido e física de loot no cenário 3D.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-gray-700/40 text-xs text-pink-400 font-semibold">
+                            C++ & Widget Blueprints
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl p-6 hover:-translate-y-1.5 hover:border-purple-500/50 transition-all duration-300 shadow-xl flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-purple-900/40 border border-purple-500/40 flex items-center justify-center text-purple-300 mb-5 text-2xl">
+                                🏛️
+                            </div>
+                            <h4 class="text-xl font-bold text-white mb-2">Mistérios dos Eternos</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                Explore ruínas colossais e enfrente autômatos desgastados pelo tempo para desvendar por que a civilização mais avançada de todas ruiu subitamente.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-gray-700/40 text-xs text-purple-400 font-semibold">
+                            Lore Ancestral & Exploração
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl p-6 hover:-translate-y-1.5 hover:border-pink-500/50 transition-all duration-300 shadow-xl flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-xl bg-pink-900/40 border border-pink-500/40 flex items-center justify-center text-pink-300 mb-5 text-2xl">
+                                ⚡
+                            </div>
+                            <h4 class="text-xl font-bold text-white mb-2">Devlog Aberto</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                Desenvolvimento transparente e documentado passo a passo, compartilhando desafios técnicos, aprendizados de arquitetura e evolução do código.
+                            </p>
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-gray-700/40 text-xs text-pink-400 font-semibold">
+                            Git & Releases Públicas
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- GALERIA DE MÍDIA / EVOLUÇÃO VISUAL -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-28 relative z-10 w-full">
+                <div class="text-center mb-16 space-y-4">
+                    <h2 class="text-xs uppercase tracking-widest font-bold text-purple-400">Bastidores do Projeto</h2>
+                    <h3 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">
+                        Galeria de Desenvolvimento
+                    </h3>
+                    <p class="text-gray-400 text-base max-w-2xl mx-auto">
+                        Capturas reais da interface, blueprint logic e conceitos que guiam o visual moderno na Unreal Engine 5.
+                    </p>
+                    <div class="h-1 w-20 bg-purple-500 rounded-full mx-auto"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Item 1 -->
+                    <div class="bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl overflow-hidden shadow-xl hover:border-purple-500/40 transition-all duration-300">
+                        <img 
+                            src="https://raw.githubusercontent.com/Funj13/Chronicles-of-the-Eternal/main/Documentation/Releases/ue5-v3.8-alpha/03_hud_visual_identity_reference.png" 
+                            alt="Identidade Visual do HUD Principal" 
+                            class="w-full h-64 object-cover object-center transform hover:scale-105 transition-transform duration-300"
+                        />
+                        <div class="p-6">
+                            <span class="text-xs uppercase tracking-wider text-purple-400 font-bold">Identidade Visual</span>
+                            <h4 class="text-lg font-bold text-white mt-1 mb-2">Mostrador do HUD Oficial</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                Mostrador circular metálico com scanlines e acabamento industrial desgastado, base estética para os novos menus e janelas de inventário.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl overflow-hidden shadow-xl hover:border-pink-500/40 transition-all duration-300">
+                        <img 
+                            src="https://raw.githubusercontent.com/Funj13/Chronicles-of-the-Eternal/main/Documentation/Releases/ue5-v3.8-alpha/04_target_final_inventory_concept.png" 
+                            alt="Conceito do Modelo Alvo de Inspeção" 
+                            class="w-full h-64 object-cover object-center transform hover:scale-105 transition-transform duration-300"
+                        />
+                        <div class="p-6">
+                            <span class="text-xs uppercase tracking-wider text-pink-400 font-bold">Design de Interface</span>
+                            <h4 class="text-lg font-bold text-white mt-1 mb-2">Conceito do Relic Scanner</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                Arquitetura planejada com abas categóricas (Resources, Gear, Plants, Archives) e painel lateral com inspeção 3D interativa de relíquias.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl overflow-hidden shadow-xl hover:border-purple-500/40 transition-all duration-300">
+                        <img 
+                            src="https://raw.githubusercontent.com/Funj13/Chronicles-of-the-Eternal/main/Documentation/Releases/ue5-v3.8-alpha/02_blueprint_filter_empty_slots.png" 
+                            alt="Lógica Blueprint de Filtragem" 
+                            class="w-full h-64 object-cover object-center transform hover:scale-105 transition-transform duration-300"
+                        />
+                        <div class="p-6">
+                            <span class="text-xs uppercase tracking-wider text-purple-400 font-bold">Engenharia de Blueprint</span>
+                            <h4 class="text-lg font-bold text-white mt-1 mb-2">Filtragem Dinâmica de Slots</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                Event Graph do WBP_Inventario garantindo a criação dinâmica de widgets apenas para itens existentes, mantendo o mapeamento de índices intacto.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl overflow-hidden shadow-xl hover:border-pink-500/40 transition-all duration-300">
+                        <img 
+                            src="https://raw.githubusercontent.com/Funj13/Chronicles-of-the-Eternal/main/Documentation/Releases/ue5-v3.8-alpha/06_slot_rounded_box_design.png" 
+                            alt="Estilização Vetorial dos Slots" 
+                            class="w-full h-64 object-cover object-center transform hover:scale-105 transition-transform duration-300"
+                        />
+                        <div class="p-6">
+                            <span class="text-xs uppercase tracking-wider text-pink-400 font-bold">Estilização de Slots</span>
+                            <h4 class="text-lg font-bold text-white mt-1 mb-2">Design Rounded Box</h4>
+                            <p class="text-gray-400 text-sm leading-relaxed">
+                                Padronização estética dos slots individuais de inventário e hotbar com bordas arredondadas e preenchimento grafite semi-transparente.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- LORE & UNIVERSO TEASER -->
+            <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mb-28 relative z-10 w-full">
+                <div class="bg-gradient-to-r from-purple-900/30 via-gray-900/60 to-pink-900/30 backdrop-blur-md border border-gray-700/60 rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden shadow-2xl">
+                    <div class="relative z-10 space-y-6">
+                        <span class="text-xs uppercase tracking-widest font-bold text-purple-400">O Universo do Jogo</span>
+                        <h3 class="text-3xl sm:text-4xl font-extrabold text-white">
+                            A Civilização dos Eternos e o Grande Colapso
+                        </h3>
+                        <p class="text-gray-300 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
+                            No apogeu de sua existência, os Eternos dominaram tecnologias capazes de manipular os elementos naturais e construir colossos arcanos. Porém, em um evento enigmático, sua civilização ruiu quase do dia para a noite. Hoje, suas ruínas atraem aventureiros dispostos a desbravar florestas densas e enfrentar perigos milenares em busca de respostas.
+                        </p>
+                        <div class="pt-4 flex flex-wrap justify-center gap-4">
+                            <a href="wiki.html" class="inline-flex items-center px-6 py-3 rounded-full font-semibold text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white shadow-lg shadow-purple-600/30 transition transform hover:-translate-y-0.5">
+                                Ler Mais Lore na Wiki &rarr;
+                            </a>
+                            <a href="sobre.html" class="inline-flex items-center px-6 py-3 rounded-full font-semibold text-sm bg-gray-800/80 hover:bg-gray-700 border border-gray-600 text-gray-200 hover:text-white transition">
+                                Conhecer a História do Projeto
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FOOTER -->
+            <footer class="bg-gray-950 border-t border-gray-800 py-12 mt-auto">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0 relative z-10">
                     <div class="text-center md:text-left">
                         <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
                             Chronicles of the Eternal
                         </span>
-                        <p class="text-gray-500 text-sm mt-2">&copy; <span id="year"></span>. Desenvolvido por Caique Pires.</p>
+                        <p class="text-gray-500 text-sm mt-2">&copy; <span id="year"></span>. Desenvolvido por Caique Pires (Funj13).</p>
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-6 text-sm text-gray-400">
+                        <a href="index.html" class="hover:text-pink-400 transition">Início</a>
+                        <a href="changelog.html" class="hover:text-pink-400 transition">Changelog</a>
+                        <a href="wiki.html" class="hover:text-pink-400 transition">Wiki</a>
+                        <a href="sobre.html" class="hover:text-pink-400 transition">Sobre</a>
+                        <a href="https://github.com/Funj13/Chronicles-of-the-Eternal" target="_blank" class="hover:text-white transition">GitHub</a>
                     </div>
                 </div>
             </footer>
+
         </div>
 
         <script>
             document.getElementById('year').textContent = new Date().getFullYear();
-
-            async function fetchGitHubReleases() {
-                // Aqui apontamos direto para o SEU repositório do jogo
-                const repoURL = 'https://api.github.com/repos/Funj13/Chronicles-of-the-Eternal/releases';
-                const container = document.getElementById('changelog-container');
-
-                try {
-                    const response = await fetch(repoURL);
-                    if (!response.ok) throw new Error('Falha ao buscar dados');
-                    
-                    const releases = await response.json();
-
-                    if (releases.length === 0) {
-                        container.innerHTML = '<p class="text-center text-gray-500 text-lg">Nenhuma novidade publicada ainda. Comece criando uma "Release" no GitHub!</p>';
-                        return;
-                    }
-
-                    let html = '';
-
-                    // Percorre cada release e monta os bloquinhos do HTML
-                    releases.forEach((release, index) => {
-                        // Lógica para alternar os lados da timeline
-                        const isEven = index % 2 !== 0; 
-                        const directionClass = isEven ? 'flex-row-reverse' : '';
-                        const textSideClass = isEven ? 'sm:text-left pl-0 sm:pl-8' : 'sm:text-right pr-0 sm:pr-8';
-                        
-                        // Formata a data para padrão BR
-                        const date = new Date(release.published_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
-                        
-                        // Renderiza o corpo do texto de Markdown para HTML
-                        const parsedBody = marked.parse(release.body || 'Sem descrição fornecida.');
-
-                        // Identifica se é pre-release, update, etc (simplificado para estilização)
-                        let tipoBadge = release.prerelease ? 'Beta / Pre-release' : 'Update';
-                        let badgeColor = release.prerelease ? 'text-yellow-300 bg-yellow-900/30 border-yellow-500/30' : 'text-purple-300 bg-purple-900/30 border-purple-500/30';
-                        let dotColor = release.prerelease ? 'bg-yellow-500 shadow-[0_0_15px_rgba(252,211,77,0.8)]' : 'bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.8)]';
-
-                        html += `
-                            <div class="sm:flex items-center justify-between w-full mb-16 relative ${directionClass}">
-                                
-                                <div class="sm:w-5/12 ${textSideClass} mb-4 sm:mb-0">
-                                    <h3 class="text-2xl font-bold text-white">Versão ${release.tag_name}</h3>
-                                    <div class="inline-block px-3 py-1 mt-2 text-xs font-semibold rounded-full uppercase tracking-wider border ${badgeColor}">
-                                        ${tipoBadge}
-                                    </div>
-                                    <p class="text-sm text-gray-500 mt-2">${date}</p>
-                                </div>
-                                
-                                <div class="hidden sm:flex absolute left-1/2 w-4 h-4 rounded-full -translate-x-1/2 border-4 border-gray-900 z-10 ${dotColor}"></div>
-                                
-                                <div class="sm:w-5/12 bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl p-6 shadow-xl hover:-translate-y-1 hover:border-purple-500/50 transition-all duration-300 overflow-hidden">
-                                    <h4 class="text-xl font-bold text-white mb-4 pb-2 border-b border-gray-700/50">${release.name}</h4>
-                                    
-                                    <div class="text-gray-300 text-sm md:text-base leading-relaxed mb-4 markdown-body break-words">
-                                        ${parsedBody}
-                                    </div>
-                                    
-                                    <a href="${release.html_url}" target="_blank" class="mt-4 inline-block text-sm text-pink-400 hover:text-pink-300 font-semibold underline decoration-transparent hover:decoration-pink-300 transition-all">Ver no GitHub &rarr;</a>
-                                </div>
-                            </div>
-                        `;
-                    });
-
-                    container.innerHTML = html;
-
-                } catch (error) {
-                    console.error(error);
-                    container.innerHTML = '<p class="text-center text-red-400 text-lg">Erro ao carregar as notas de atualização. Verifique o console.</p>';
-                }
-            }
-
-            // Inicia a função assim que a página carrega
-            fetchGitHubReleases();
         </script>
     </body>
 </html>

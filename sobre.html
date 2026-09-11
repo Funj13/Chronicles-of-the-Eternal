@@ -27,14 +27,15 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-20 items-center">
                         <div class="hidden md:flex space-x-8 items-center">
-                            <a href="index.html" class="text-gray-300 hover:text-white transition">Changelog</a>
+                            <a href="index.html" class="text-gray-300 hover:text-white transition">Início</a>
+                            <a href="changelog.html" class="text-gray-300 hover:text-white transition">Changelog</a>
                             <a href="wiki.html" class="text-gray-300 hover:text-white transition">Wiki</a>
                         </div>
 
                         <div class="flex-shrink-0 flex items-center justify-center">
-                            <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 uppercase tracking-widest drop-shadow-lg text-center">
+                            <a href="index.html" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500 uppercase tracking-widest drop-shadow-lg text-center hover:opacity-90 transition">
                                 Chronicles of the Eternal
-                            </span>
+                            </a>
                         </div>
 
                         <div class="hidden md:flex space-x-8 items-center">
@@ -57,8 +58,9 @@
 
                 <div :class="{'block': open, 'hidden': !open}" class="md:hidden bg-gray-900 border-b border-gray-700">
                     <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                        <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Início</a>
-                        <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Changelog</a>
+                        <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Início</a>
+                        <a href="changelog.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Changelog</a>
+                        <a href="wiki.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700">Wiki</a>
                         <a href="sobre.html" class="block px-3 py-2 rounded-md text-base font-medium text-pink-400 bg-gray-800">Sobre</a>
                         <a href="https://github.com/Funj13/Chronicles-of-the-Eternal" target="_blank" class="block px-3 py-2 mt-2 text-center rounded-md text-base font-medium bg-gradient-to-r from-purple-600 to-pink-600 text-white">Ver no GitHub</a>
                     </div>
@@ -90,10 +92,13 @@
                     <div class="bg-gray-800/40 backdrop-blur-md border border-gray-700/50 rounded-2xl p-8 shadow-xl hover:border-pink-500/30 transition-all duration-300">
                         <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
                             <span class="bg-pink-500 w-2 h-8 rounded-full mr-3"></span>
-                            A Tecnologia
+                            A Tecnologia e Evolução
                         </h2>
                         <p class="text-gray-300 leading-relaxed mb-4">
-                            O projeto está sendo construído do zero utilizando a <strong>Godot 4</strong>, aproveitando os novos recursos avançados de renderização e física da engine. Toda a modelagem 3D, texturização e animação de personagens e cenários faz parte de um fluxo de trabalho cuidadoso para garantir que o mundo dos Eternos ganhe vida.
+                            O projeto teve seus primeiros protótipos na <strong>Godot Engine 4</strong>, onde foram validadas as dinâmicas essenciais de inventário, movimentação e combate básico. Buscando um padrão visual de alta fidelidade e arquitetura profissional de ponta, o desenvolvimento migrou definitivamente para a <strong>Unreal Engine 5.4</strong>.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed">
+                            A nova fundação utiliza <strong>Blueprints e C++</strong>, <em>Enhanced Input</em>, componentes desacoplados de inventário reativo (com Wrap Box dinâmico), iluminação Lumen e fidelidade gráfica moderna para dar vida com intensidade ao universo dos Eternos.
                         </p>
                     </div>
 
@@ -104,4 +109,43 @@
                         </h2>
                         <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
                             <div class="w-24 h-24 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 p-1 flex-shrink-0">
-                                <div class="w-full h-full rounded-full bg-gray-900 flex items-center justify-
+                                <div class="w-full h-full rounded-full bg-gray-900 flex items-center justify-center text-3xl font-bold text-white">
+                                    CP
+                                </div>
+                            </div>
+                            <div class="text-center md:text-left">
+                                <h3 class="text-xl font-bold text-white">Caique Pires (Funj13)</h3>
+                                <p class="text-sm text-purple-400 font-medium mb-3">Desenvolvedor Solo & Criador do Projeto</p>
+                                <p class="text-gray-300 leading-relaxed text-sm">
+                                    Apaixonado por desenvolvimento de jogos, mecânicas de RPG, sistemas de interface reativos e arquiteturas escaláveis em C++ e Unreal Engine 5. Todo o processo de criação é documentado abertamente no GitHub através de releases detalhadas e devlogs.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <footer class="bg-gray-950 border-t border-gray-800 py-12 mt-auto">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0 relative z-10">
+                    <div class="text-center md:text-left">
+                        <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-500">
+                            Chronicles of the Eternal
+                        </span>
+                        <p class="text-gray-500 text-sm mt-2">&copy; <span id="year"></span>. Desenvolvido por Caique Pires.</p>
+                    </div>
+                    <div class="flex space-x-6 text-sm text-gray-400">
+                        <a href="index.html" class="hover:text-white transition">Início</a>
+                        <a href="changelog.html" class="hover:text-white transition">Changelog</a>
+                        <a href="wiki.html" class="hover:text-white transition">Wiki</a>
+                        <a href="https://github.com/Funj13/Chronicles-of-the-Eternal" target="_blank" class="hover:text-white transition">GitHub</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+        <script>
+            document.getElementById('year').textContent = new Date().getFullYear();
+        </script>
+    </body>
+</html>
